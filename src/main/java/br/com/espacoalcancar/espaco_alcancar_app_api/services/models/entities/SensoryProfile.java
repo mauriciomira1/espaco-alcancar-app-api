@@ -3,7 +3,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.services.models.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities.Child;
+import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities.ChildEntity;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -41,7 +41,7 @@ public class SensoryProfile {
   private ResultsOfSensoryProfile resultsOfSensoryProfile;
 
   @ManyToOne(optional = false)
-  private Child child;
+  private ChildEntity child;
 
   private LocalDateTime createdAt;
 }

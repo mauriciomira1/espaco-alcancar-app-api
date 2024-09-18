@@ -1,4 +1,4 @@
-package br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities;
+package br.com.espacoalcancar.espaco_alcancar_app_api.register.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

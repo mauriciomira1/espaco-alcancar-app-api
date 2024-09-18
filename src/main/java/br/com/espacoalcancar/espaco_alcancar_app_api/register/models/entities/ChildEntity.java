@@ -1,50 +1,45 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities;
 
-import java.util.List;
+import java.time.LocalDate;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.Gender;
+import br.com.espacoalcancar.espaco_alcancar_app_api.services.models.entities.SensoryProfile;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
-@Entity
 @Data
-@Table(name = "tab_user")
-public class Register {
+@Entity
+@Table(name = "tab_child")
+public class ChildEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Setter(value = AccessLevel.NONE)
   private Integer id;
 
-  @Column(length = 70)
-  private String fullname;
-
-  @Column(length = 16)
-  private String phone;
-
   @Column(length = 30)
-  private String email;
+  private String name;
 
-  @OneToMany
-  private List<Child> child;
+  private LocalDate birth;
+
+  @ManyToOne
+  private RegisterEntity registerEntity;
+
+  @OneToMany(mappedBy = "child")
+  private SensoryProfile sensoryProfile;
 
   @Enumerated(EnumType.STRING)
   private Gender gender;
-
-  @Embedded
-  private Address address;
-
-  @Embedded
-  private Profile profile;
 
 }
