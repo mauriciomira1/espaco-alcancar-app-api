@@ -25,7 +25,7 @@ public class Review {
   @Column(length = 400)
   private String content;
 
-  @Column(nullable = false, length = 1)
+  @Column(length = 1)
   private Integer stars;
 
   private LocalDateTime createdAt;

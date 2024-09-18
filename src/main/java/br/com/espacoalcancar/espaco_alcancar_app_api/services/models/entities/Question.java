@@ -12,10 +12,10 @@ import lombok.Data;
 @Data
 public class Question {
 
-  @Column(nullable = false, length = 2)
+  @Column(length = 2)
   private Integer number;
 
-  @Column(nullable = false, length = 200)
+  @Column(length = 200)
   private String question;
 
   @Enumerated(EnumType.STRING)

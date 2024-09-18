@@ -1,5 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -24,17 +26,17 @@ public class Register {
   @Setter(value = AccessLevel.NONE)
   private Integer id;
 
-  @Column(nullable = false, length = 70)
+  @Column(length = 70)
   private String fullname;
 
-  @Column(nullable = false, length = 16)
+  @Column(length = 16)
   private String phone;
 
-  @Column(nullable = false, length = 30)
+  @Column(length = 30)
   private String email;
 
   @OneToMany
-  private Child child;
+  private List<Child> child;
 
   @Enumerated(EnumType.STRING)
   private Gender gender;

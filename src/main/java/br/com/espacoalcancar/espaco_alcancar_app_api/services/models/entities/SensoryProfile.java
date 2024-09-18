@@ -32,7 +32,7 @@ public class SensoryProfile {
   private Status status;
 
   @Enumerated(EnumType.STRING)
-  private SensoryProfileType type;
+  private SensoryProfileType profileType;
 
   @ElementCollection
   private List<Question> questions;
