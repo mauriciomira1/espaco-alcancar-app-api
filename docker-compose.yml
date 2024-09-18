@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: espaco_alcancar_app_api
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=espaco-alcancar-admin
+      - POSTGRES_PASSWORD=#Oiciruam0102
+      - POSTGRES_DB=espaco-alcancar-db
