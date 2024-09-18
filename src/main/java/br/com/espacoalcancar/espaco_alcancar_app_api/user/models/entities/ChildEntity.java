@@ -1,9 +1,9 @@
-package br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities;
+package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.time.LocalDate;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.Gender;
-import br.com.espacoalcancar.espaco_alcancar_app_api.services.models.entities.SensoryProfile;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfile;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,7 +34,7 @@ public class ChildEntity {
   private LocalDate birth;
 
   @ManyToOne
-  private RegisterEntity registerEntity;
+  private UserEntity registerEntity;
 
   @OneToMany(mappedBy = "child")
   private SensoryProfile sensoryProfile;

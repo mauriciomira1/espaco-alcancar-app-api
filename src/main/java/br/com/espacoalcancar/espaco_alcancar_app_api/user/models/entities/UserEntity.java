@@ -1,10 +1,10 @@
-package br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities;
+package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.util.List;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.Address;
-import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.Gender;
-import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.Profile;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Address;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Gender;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ import lombok.Setter;
 @Entity
 @Data
 @Table(name = "tab_user")
-public class RegisterEntity {
+public class UserEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +48,6 @@ public class RegisterEntity {
   private Address address;
 
   @Embedded
-  private Profile profile;
+  private ProfileType profileType;
 
 }

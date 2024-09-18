@@ -1,9 +1,9 @@
-package br.com.espacoalcancar.espaco_alcancar_app_api.services.models.entities;
+package br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.register.models.entities.ChildEntity;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
