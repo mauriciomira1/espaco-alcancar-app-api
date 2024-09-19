@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/user")
@@ -31,7 +30,7 @@ public class UserController {
   }
 
   // Listar todos os usuários
-  @GetMapping()
+  @GetMapping("/all")
   public List<UserResponse> listAll() {
     return userService.listAll();
   }

@@ -76,9 +76,9 @@ public class UserService {
   }
 
   // Obter ID do usuário atual
-  public Integer getId() {
+  // public Integer getId() {
 
-  }
+  // }
 
   // Classe acessória para conversão de UserEntity para UserResponse
   private UserResponse convertToUserResponse(UserEntity userEntity) {
