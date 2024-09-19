@@ -30,7 +30,7 @@ public class UserController {
   }
 
   // Listar todos os usuários
-  @GetMapping()
+  @GetMapping("/all")
   public List<UserResponse> listAll() {
     return userService.listAll();
   }
