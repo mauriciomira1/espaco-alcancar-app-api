@@ -18,16 +18,18 @@ public class ChildController {
   @Autowired
   ChildService service;
 
-  @PostMapping()
-  public Integer create(@RequestBody ChildRequest request) {
-    ChildEntity entity = new ChildEntity();
-
-    entity.setBirth(request.getBirth());
-    entity.setName(request.getName());
-    entity.setGender(request.getGender());
-    entity.setUserEntity(null);
-
-    service.create(request);
-  }
+  /*
+   * @PostMapping()
+   * public Integer create(@RequestBody ChildRequest request) {
+   * ChildEntity entity = new ChildEntity();
+   * 
+   * entity.setBirth(request.getBirth());
+   * entity.setName(request.getName());
+   * entity.setGender(request.getGender());
+   * entity.setUserEntity(null);
+   * 
+   * service.create(request);
+   * }
+   */
 
 }
