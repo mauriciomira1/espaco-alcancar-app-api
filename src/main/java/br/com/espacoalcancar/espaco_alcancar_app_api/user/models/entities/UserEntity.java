@@ -30,7 +30,7 @@ public class UserEntity {
   private Integer id;
 
   @Column(length = 70)
-  private String fullname;
+  private String name;
 
   @Column(length = 16)
   private String phone;
@@ -38,7 +38,7 @@ public class UserEntity {
   @Column(length = 30)
   private String email;
 
-  @OneToMany(mappedBy = "registerEntity")
+  @OneToMany(mappedBy = "userEntity")
   private List<ChildEntity> children;
 
   @Enumerated(EnumType.STRING)

@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfile;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Gender;
@@ -34,10 +35,10 @@ public class ChildEntity {
   private LocalDate birth;
 
   @ManyToOne
-  private UserEntity registerEntity;
+  private UserEntity userEntity;
 
   @OneToMany(mappedBy = "child")
-  private SensoryProfile sensoryProfile;
+  private List<SensoryProfile> sensoryProfile;
 
   @Enumerated(EnumType.STRING)
   private Gender gender;
