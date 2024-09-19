@@ -29,7 +29,7 @@ public class UserController {
     return userId;
   }
 
-  // Listar todos os usuários
+  // Listar todos os usuários cadastrados
   @GetMapping("/all")
   public List<UserResponse> listAll() {
     return userService.listAll();
