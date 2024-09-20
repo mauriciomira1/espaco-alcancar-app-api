@@ -21,11 +21,10 @@ public class ChildService {
 
   // Adicionar um filho
   public Integer create(ChildRequest request, HttpServletRequest httpServletRequest) {
+
+    // Recuperando o ID do usuário configurado no SecurityFilter.java
     var userIdObject = httpServletRequest.getAttribute("user_id");
     Integer userId = Integer.valueOf(userIdObject.toString());
-
-    System.out.println("----------------------------------------------------------------");
-    System.out.println(userId);
 
     UserEntity userEntity = userRepository.findById(userId).orElse(null);
 
@@ -34,11 +33,12 @@ public class ChildService {
     entity.setBirth(request.getBirth());
     entity.setName(request.getName());
     entity.setGender(request.getGender());
-    entity.setUserEntity(userEntity); // id do User
+    entity.setUserEntity(userEntity);
 
     return repository.save(entity).getId();
   }
 
+  // Buscar por uma criança
   public ChildEntity findById(Integer id) {
     return repository.findById(id).orElse(null);
   }

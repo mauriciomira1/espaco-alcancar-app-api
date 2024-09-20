@@ -47,7 +47,6 @@ public class UserService {
   // Criar novo usuário
   public Integer create(UserRequest request) {
     UserEntity entity = new UserEntity();
-    // List<ChildEntity> childrenEntity = new ArrayList<>();
 
     entity.setName(request.getName());
     entity.setAddress(request.getAddress());
@@ -57,32 +56,8 @@ public class UserService {
     entity.setProfileType(request.getProfileType());
     entity.setPassword(passwordEncoder.encode(request.getPassword()));
 
-    /*
-     * if (request.getChildren() != null) {
-     * for (ChildRequest childRequest : request.getChildren()) {
-     * ChildEntity childEntity = new ChildEntity();
-     * 
-     * childEntity.setName(childRequest.getName());
-     * childEntity.setBirth(childRequest.getBirth());
-     * childEntity.setGender(childRequest.getGender());
-     * childEntity.setUserEntity(entity); // Define a relação bidirecional
-     * 
-     * childrenEntity.add(childEntity);
-     * 
-     * }
-     * entity.setChildren(childrenEntity);
-     * } else {
-     * 
-     * entity.setChildren(null);
-     * }
-     */
-
     return repository.save(entity).getId();
   }
-
-  // Obter ID do usuário atual
-
-  // public Integer getId() {}
 
   // Classe acessória para conversão de UserEntity para UserResponse
   private UserResponse convertToUserResponse(UserEntity userEntity) {

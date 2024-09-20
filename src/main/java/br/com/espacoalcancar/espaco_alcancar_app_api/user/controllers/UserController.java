@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -24,7 +25,7 @@ public class UserController {
 
   // Criar novo usuário
   @PostMapping("/new")
-  public Integer create(@RequestBody UserRequest request) {
+  public Integer create(@Valid @RequestBody UserRequest request) {
     userId = userService.create(request);
     return userId;
   }
