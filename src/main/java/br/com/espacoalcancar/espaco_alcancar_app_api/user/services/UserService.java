@@ -7,6 +7,7 @@ import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
@@ -19,6 +20,9 @@ public class UserService {
 
   @Autowired
   private UserRepository repository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   // Listar todos os usuários cadastrados
   public List<UserResponse> listAll() {
@@ -51,6 +55,7 @@ public class UserService {
     entity.setGender(request.getGender());
     entity.setPhone(request.getPhone());
     entity.setProfileType(request.getProfileType());
+    entity.setPassword(passwordEncoder.encode(request.getPassword()));
 
     /*
      * if (request.getChildren() != null) {

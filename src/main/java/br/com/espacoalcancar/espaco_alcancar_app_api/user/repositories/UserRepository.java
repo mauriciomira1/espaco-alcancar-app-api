@@ -9,4 +9,6 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEn
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
   Optional<UserEntity> findByName(String name);
 
+  Optional<UserEntity> findByEmail(String email);
+
 }

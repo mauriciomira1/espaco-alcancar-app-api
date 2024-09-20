@@ -29,14 +29,17 @@ public class UserEntity {
   @Setter(value = AccessLevel.NONE)
   private Integer id;
 
-  @Column(length = 70)
+  @Column(length = 70, nullable = false, unique = true)
   private String name;
 
   @Column(length = 16)
   private String phone;
 
-  @Column(length = 30)
+  @Column(length = 30, nullable = false, unique = true)
   private String email;
+
+  @Column(length = 60, nullable = false)
+  private String password;
 
   @OneToMany(mappedBy = "userEntity")
   private List<ChildEntity> children;
