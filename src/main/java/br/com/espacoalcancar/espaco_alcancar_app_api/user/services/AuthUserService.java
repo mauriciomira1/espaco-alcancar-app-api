@@ -1,4 +1,4 @@
-package br.com.espacoalcancar.espaco_alcancar_app_api.user.useCases;
+package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserReq
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.UserRepository;
 
 @Service
-public class AuthUserUseCase {
+public class AuthUserService {
 
   @Autowired
   private UserRepository userRepository;

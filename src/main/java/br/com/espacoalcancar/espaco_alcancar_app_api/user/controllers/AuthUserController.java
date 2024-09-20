@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserRequest;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.useCases.AuthUserUseCase;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.AuthUserService;
 
 @RestController
 public class AuthUserController {
 
   @Autowired
-  AuthUserUseCase authUserUseCase;
+  AuthUserService authUserUseCase;
 
   @PostMapping("/auth")
   public ResponseEntity<Object> create(@RequestBody AuthUserRequest request) throws AuthenticationException {
