@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.ChildService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class ChildController {
   ChildService service;
 
   @PostMapping("/new")
-  public Integer create(@RequestBody ChildRequest childRequest, HttpServletRequest request) {
+  public Integer create(@Valid @RequestBody ChildRequest childRequest, HttpServletRequest request) {
 
     return this.service.create(childRequest, request);
 
