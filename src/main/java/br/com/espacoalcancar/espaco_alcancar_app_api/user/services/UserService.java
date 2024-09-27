@@ -7,9 +7,11 @@ import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
@@ -44,6 +46,13 @@ public class UserService {
     return response;
   }
 
+  // Procurar por um usuário a partir do ID
+  public UserDashboardResponse findById(Integer id) throws UsernameNotFoundException {
+    var response = this.repository.findById(id)
+        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
+    return convertToUserDashboardResponse(response);
+  }
+
   // Criar novo usuário
   public Integer create(UserRequest request) {
     UserEntity entity = new UserEntity();
@@ -64,6 +73,22 @@ public class UserService {
     UserResponse response = new UserResponse();
     response.setId(userEntity.getId());
     response.setName(userEntity.getName());
+    return response;
+  }
+
+  // Classe acessória para conversão de UserEntity para UserDashboardResponse
+  private UserDashboardResponse convertToUserDashboardResponse(UserEntity userEntity) {
+    UserDashboardResponse response = new UserDashboardResponse();
+    response.setId(userEntity.getId());
+    response.setName(userEntity.getName());
+    response.setAddress(userEntity.getAddress());
+    response.setEmail(userEntity.getEmail());
+    response.setPhone(userEntity.getPhone());
+    response.setChildren(userEntity.getChildren());
+    response.setProfileType(userEntity.getProfileType());
+    response.setGender(userEntity.getGender());
+    response.setPassword(userEntity.getPassword());
+
     return response;
   }
 }

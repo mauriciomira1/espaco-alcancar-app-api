@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.stream.Collectors;
 
 import javax.naming.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.UserRepository;
 
@@ -46,8 +44,7 @@ public class AuthUserService {
       throw new AuthenticationException("User/password incorrect.");
     }
 
-    var scopes = user.getProfileType().
-
+    // var scopes = user.getProfileType().
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var token = JWT
