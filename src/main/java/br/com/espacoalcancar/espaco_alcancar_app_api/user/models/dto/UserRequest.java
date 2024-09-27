@@ -3,8 +3,8 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Address;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Gender;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Relationship;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
@@ -20,7 +20,7 @@ public class UserRequest {
 
   @Email(message = "O campo [email] deve conter um e-mail válido.")
   private String email;
-  private Gender gender;
+  private Relationship relationship;
   private Address address;
   private ProfileType profileType;
 }

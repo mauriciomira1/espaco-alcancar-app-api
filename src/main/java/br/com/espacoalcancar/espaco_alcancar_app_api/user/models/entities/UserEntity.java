@@ -3,8 +3,8 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 import java.util.List;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Address;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Gender;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Relationship;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -45,7 +45,7 @@ public class UserEntity {
   private List<ChildEntity> children;
 
   @Enumerated(EnumType.STRING)
-  private Gender gender;
+  private Relationship relationship;
 
   @Embedded
   private Address address;

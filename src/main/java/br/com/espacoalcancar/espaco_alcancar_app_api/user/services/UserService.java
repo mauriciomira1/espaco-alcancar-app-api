@@ -60,7 +60,7 @@ public class UserService {
     entity.setName(request.getName());
     entity.setAddress(request.getAddress());
     entity.setEmail(request.getEmail());
-    entity.setGender(request.getGender());
+    entity.setRelationship(request.getRelationship());
     entity.setPhone(request.getPhone());
     entity.setProfileType(request.getProfileType());
     entity.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -86,7 +86,7 @@ public class UserService {
     response.setPhone(userEntity.getPhone());
     response.setChildren(userEntity.getChildren());
     response.setProfileType(userEntity.getProfileType());
-    response.setGender(userEntity.getGender());
+    response.setRelationship(userEntity.getRelationship());
     response.setPassword(userEntity.getPassword());
 
     return response;
