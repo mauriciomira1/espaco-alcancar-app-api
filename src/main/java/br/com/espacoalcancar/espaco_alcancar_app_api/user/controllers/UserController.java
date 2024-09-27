@@ -41,5 +41,4 @@ public class UserController {
   public Integer getMethodName() {
     return userId;
   }
-
 }

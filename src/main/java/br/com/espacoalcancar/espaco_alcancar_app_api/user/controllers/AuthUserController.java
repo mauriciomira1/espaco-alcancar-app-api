@@ -18,6 +18,7 @@ public class AuthUserController {
   @Autowired
   AuthUserService authUserUseCase;
 
+  // Login de usuário
   @PostMapping("/auth")
   public ResponseEntity<Object> create(@RequestBody AuthUserRequest request) throws AuthenticationException {
     try {
