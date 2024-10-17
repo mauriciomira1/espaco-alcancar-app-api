@@ -49,8 +49,6 @@ public class UserController {
     }
 
     var userId = principal.getId();
-    System.out.println("----------------------------------------------------------------");
-    System.out.println(userId);
     UserDashboardResponse user = userService.findById(userId);
 
     return user;
