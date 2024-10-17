@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.util.List;
+import java.util.Date;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Address;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
@@ -15,6 +16,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -52,5 +55,9 @@ public class UserEntity {
 
   @Embedded
   private ProfileType profileType;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(nullable = false, updatable = false)
+  private Date createdAt = new Date();
 
 }

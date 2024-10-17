@@ -50,9 +50,7 @@ public class UserController {
 
     var userId = principal.getId();
     UserDashboardResponse user = userService.findById(userId);
-
     return user;
-
   }
 
   // Listar todos os usuários cadastrados
@@ -61,9 +59,4 @@ public class UserController {
     return userService.listAll();
   }
 
-  // Obter ID do Usuário
-  @GetMapping("/{id}")
-  public Integer getMethodName() {
-    return userId;
-  }
 }
