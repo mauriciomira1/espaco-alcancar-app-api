@@ -56,7 +56,6 @@ public class UserService {
   // Criar novo usuário
   public Integer create(UserRequest request) {
     UserEntity entity = new UserEntity();
-
     entity.setName(request.getName());
     entity.setAddress(request.getAddress());
     entity.setEmail(request.getEmail());
@@ -64,7 +63,6 @@ public class UserService {
     entity.setPhone(request.getPhone());
     entity.setProfileType(request.getProfileType());
     entity.setPassword(passwordEncoder.encode(request.getPassword()));
-
     return repository.save(entity).getId();
   }
 
@@ -88,7 +86,6 @@ public class UserService {
     response.setProfileType(userEntity.getProfileType());
     response.setRelationship(userEntity.getRelationship());
     response.setPassword(userEntity.getPassword());
-
     return response;
   }
 }

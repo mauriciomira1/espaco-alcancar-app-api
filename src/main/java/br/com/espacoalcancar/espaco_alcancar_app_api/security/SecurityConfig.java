@@ -24,10 +24,12 @@ public class SecurityConfig {
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     SecurityFilter securityFilter = new SecurityFilter(jwtProvider, userService);
     http
+        .cors(cors -> cors.configure(http))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> {
           auth.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
-              .requestMatchers(HttpMethod.POST, "/auth").permitAll();
+              .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+              .requestMatchers(HttpMethod.GET, "/user/me").authenticated();
           auth.anyRequest().authenticated();
         })
         .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
