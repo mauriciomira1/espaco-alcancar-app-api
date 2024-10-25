@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +58,26 @@ public class UserController {
   @GetMapping("/all")
   public List<UserResponse> listAll() {
     return userService.listAll();
+  }
+
+  // Editar dados do usuário
+  @PutMapping("/edit")
+  public UserDashboardResponse updateUser(@Valid @RequestBody UserRequest request) {
+    // Obtendo o objeto de autenticação atual
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new RuntimeException("User is not authenticated");
+    }
+
+    var principal = (UserDashboardResponse) authentication.getPrincipal();
+    if (!(principal instanceof UserDashboardResponse)) {
+      throw new RuntimeException("User principal is not of expected type");
+    }
+
+    var userId = principal.getId();
+    UserDashboardResponse updatedUser = userService.updateUser(userId, request);
+    return updatedUser;
   }
 
 }

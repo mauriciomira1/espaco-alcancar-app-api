@@ -66,6 +66,23 @@ public class UserService {
     return repository.save(entity).getId();
   }
 
+  // Atualizar usuário existente
+  public UserDashboardResponse updateUser(Integer userId, UserRequest request) {
+    UserEntity userEntity = repository.findById(userId)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+    BeanUtils.copyProperties(request, userEntity, "id", "password");
+    if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+      userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
+    }
+
+    repository.save(userEntity);
+
+    UserDashboardResponse response = new UserDashboardResponse();
+    BeanUtils.copyProperties(userEntity, response);
+    return response;
+  }
+
   // Classe acessória para conversão de UserEntity para UserResponse
   private UserResponse convertToUserResponse(UserEntity userEntity) {
     UserResponse response = new UserResponse();
