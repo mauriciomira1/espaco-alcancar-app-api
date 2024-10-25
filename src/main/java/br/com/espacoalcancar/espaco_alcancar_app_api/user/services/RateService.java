@@ -1,7 +1,10 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +44,13 @@ public class RateService {
 
   // Buscar todas as avaliações de um usuário baseado no seu ID
   public Iterable<RateResponse> findByUserId(Integer userId) {
-    return this.rateRepository.findByUserId(userId);
+    List<RateEntity> rateEntities = this.rateRepository.findAllByUserId(userId);
+    return rateEntities.stream().map(this::convertToRateResponse).collect(Collectors.toList());
+  }
+
+  private RateResponse convertToRateResponse(RateEntity entity) {
+    RateResponse response = new RateResponse();
+    BeanUtils.copyProperties(entity, response);
+    return response;
   }
 }
