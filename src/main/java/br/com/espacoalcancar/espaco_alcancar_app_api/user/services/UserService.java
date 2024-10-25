@@ -7,6 +7,8 @@ import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -81,6 +83,24 @@ public class UserService {
     UserDashboardResponse response = new UserDashboardResponse();
     BeanUtils.copyProperties(userEntity, response);
     return response;
+  }
+
+  // Obter usuário atual
+  public UserDashboardResponse getCurrentUser() {
+    // Obtendo o objeto de autenticação atual
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new RuntimeException("User is not authenticated");
+    }
+
+    var principal = (UserDashboardResponse) authentication.getPrincipal();
+    if (!(principal instanceof UserDashboardResponse)) {
+      throw new RuntimeException("User principal is not of expected type");
+    }
+
+    var userId = principal.getId();
+    return findById(userId);
   }
 
   // Classe acessória para conversão de UserEntity para UserResponse

@@ -37,21 +37,7 @@ public class UserController {
   // Buscar usuário
   @GetMapping("/me")
   public UserDashboardResponse getCurrentUser() {
-    // Obtendo o objeto de autenticação atual
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication == null || !authentication.isAuthenticated()) {
-      throw new RuntimeException("User is not authenticated");
-    }
-
-    var principal = (UserDashboardResponse) authentication.getPrincipal();
-    if (!(principal instanceof UserDashboardResponse)) {
-      throw new RuntimeException("User principal is not of expected type");
-    }
-
-    var userId = principal.getId();
-    UserDashboardResponse user = userService.findById(userId);
-    return user;
+    return userService.getCurrentUser();
   }
 
   // Listar todos os usuários cadastrados
