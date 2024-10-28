@@ -68,12 +68,12 @@ public class UserService {
     return repository.save(entity).getId();
   }
 
-  // Atualizar usuário existente
+  // Editar dados do usuário
   public UserDashboardResponse updateUser(Integer userId, UserRequest request) {
     UserEntity userEntity = repository.findById(userId)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    BeanUtils.copyProperties(request, userEntity, "id", "password");
+    BeanUtils.copyProperties(request, userEntity, "id", "password", "profileType", "email");
     if (request.getPassword() != null && !request.getPassword().isEmpty()) {
       userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
     }

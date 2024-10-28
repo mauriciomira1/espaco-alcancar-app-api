@@ -29,6 +29,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> {
           auth.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
               .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+              .requestMatchers(HttpMethod.POST, "/dashboard/user/edit").authenticated()
               .requestMatchers(HttpMethod.POST, "/dashboard/rate/new").authenticated()
               .requestMatchers(HttpMethod.GET, "/dashboard/rate/list-all").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated();

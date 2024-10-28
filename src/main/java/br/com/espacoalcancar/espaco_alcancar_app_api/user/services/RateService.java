@@ -48,9 +48,17 @@ public class RateService {
     return rateEntities.stream().map(this::convertToRateResponse).collect(Collectors.toList());
   }
 
+  // Buscar todas as avaliações de todos os usuários
+  public Iterable<RateResponse> findAll() {
+    List<RateEntity> rateEntities = this.rateRepository.findAll();
+    return rateEntities.stream().map(this::convertToRateResponse).collect(Collectors.toList());
+  }
+
+  // Converter RateEntity para RateResponse
   private RateResponse convertToRateResponse(RateEntity entity) {
     RateResponse response = new RateResponse();
     BeanUtils.copyProperties(entity, response);
     return response;
   }
+
 }

@@ -39,4 +39,10 @@ public class RateController {
 
     return this.rateService.findByUserId(userId);
   }
+
+  // Listar todas as avaliações de todos os usuários
+  @GetMapping("/list-all-users")
+  public Iterable<RateResponse> listAllRates() {
+    return this.rateService.findAll();
+  }
 }
