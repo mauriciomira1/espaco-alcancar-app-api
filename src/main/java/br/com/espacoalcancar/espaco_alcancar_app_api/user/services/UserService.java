@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.naming.NameNotFoundException;
 
@@ -27,6 +28,27 @@ public class UserService {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  public List<String> getUserRoles(String email) {
+    Optional<UserEntity> user = repository.findByEmail(email);
+    if (user.isEmpty()) {
+      throw new UsernameNotFoundException("User not found");
+    } else {
+
+      List<String> roles = new ArrayList<>();
+
+      if (user.get().getProfileType().isAdmin()) {
+        roles.add("ROLE_ADMIN");
+      }
+      if (user.get().getProfileType().isProfessional()) {
+        roles.add("ROLE_PROFESSIONAL");
+      }
+      if (user.get().getProfileType().isPatient()) {
+        roles.add("ROLE_PATIENT");
+      }
+      return roles;
+    }
+  }
 
   // Listar todos os usuários cadastrados
   public List<UserResponse> listAll() {

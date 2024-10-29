@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 import javax.naming.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserRequest;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.UserRepository;
 
 @Service
@@ -30,7 +32,7 @@ public class AuthUserService {
   private String secretKey;
 
   // Autenticação do usuário
-  public String execute(AuthUserRequest authUserRequest) throws AuthenticationException {
+  public AuthUserResponse execute(AuthUserRequest authUserRequest) throws AuthenticationException {
 
     var user = this.userRepository.findByEmail(authUserRequest.getEmail())
         .orElseThrow(() -> {
@@ -43,8 +45,10 @@ public class AuthUserService {
     if (!passwordMatches) {
       throw new AuthenticationException("User/password incorrect.");
     }
+    System.out.println("------------------1111111111111111111--------------------------------------------");
+    System.out.println(user.getEmail());
 
-    // var scopes = user.getProfileType().
+    List<String> roles = new UserService().getUserRoles(user.getEmail());
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var token = JWT
@@ -54,7 +58,10 @@ public class AuthUserService {
         .withSubject(user.getId().toString())
         .sign(algorithm);
 
-    return token;
+    AuthUserResponse response = new AuthUserResponse();
+    response.setToken(token);
+    response.setRoles(roles);
+    return response;
 
   }
 }
