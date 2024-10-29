@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfile;
@@ -12,9 +13,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -35,12 +39,23 @@ public class ChildEntity {
   private LocalDate birth;
 
   @ManyToOne
-  private UserEntity userEntity;
+  @JoinColumn(name = "user_id", nullable = false)
+  private UserEntity user;
 
   @OneToMany(mappedBy = "child")
   private List<SensoryProfile> sensoryProfile;
 
   @Enumerated(EnumType.STRING)
   private Gender gender;
+
+  @Column(name = "user_id", insertable = false, updatable = false)
+  private Integer userId;
+
+  @Column(nullable = false, updatable = false, name = "created_at")
+  private LocalDateTime createdAt = LocalDateTime.now();
+
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(nullable = false, name = "updated_at")
+  private LocalDateTime updatedAt = LocalDateTime.now();
 
 }

@@ -6,4 +6,6 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildE
 
 public interface ChildRepository extends JpaRepository<ChildEntity, Integer> {
 
+  Iterable<ChildEntity> findAllByUserId(Integer userId);
+
 }

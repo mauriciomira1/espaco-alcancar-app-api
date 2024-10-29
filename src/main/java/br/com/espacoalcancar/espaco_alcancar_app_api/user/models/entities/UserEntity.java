@@ -44,7 +44,7 @@ public class UserEntity {
   @Column(length = 100, nullable = false)
   private String password;
 
-  @OneToMany(mappedBy = "userEntity")
+  @OneToMany(mappedBy = "user")
   private List<ChildEntity> children;
 
   @Enumerated(EnumType.STRING)
