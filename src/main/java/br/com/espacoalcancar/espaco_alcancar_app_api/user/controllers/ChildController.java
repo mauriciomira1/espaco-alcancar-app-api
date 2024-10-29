@@ -3,8 +3,8 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildRequest;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.ChildService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -34,8 +34,8 @@ public class ChildController {
   }
 
   // Buscar todos os filhos/dependentes
-  @GetMapping("/list-all")
-  public List<ChildEntity> listAll() {
+  @GetMapping("/list")
+  public List<ChildResponse> list() {
 
     // buscar ID do usuário logado
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,10 +51,16 @@ public class ChildController {
 
     var userId = principal.getId();
 
-    Iterable<ChildEntity> iterable = this.childService.listAll(userId);
-    List<ChildEntity> list = new ArrayList<>();
-    iterable.forEach(list::add);
-    return list;
+    List<ChildResponse> childResponses = new ArrayList<>();
+    this.childService.list(userId).forEach(childResponses::add);
+    return childResponses;
+
+  }
+
+  // Listar todos os dependentes cadastrados
+  @GetMapping("/list-all")
+  public List<ChildResponse> listAll() {
+    return childService.listAll();
   }
 
 }

@@ -1,8 +1,12 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildRequest;
@@ -43,27 +47,44 @@ public class ChildService {
 
   // Buscar por uma criança
   public ChildResponse findById(Integer id) {
-    /*
-     * return childRepository.findById(id)
-     * .map(entity -> new ChildResponse(entity.getId(), entity.getName(),
-     * entity.getBirth(), entity.getGender(),
-     * entity.getUser().getId()))
-     * .orElse(null);
-     */
     var childEntity = childRepository.findById(id).orElse(null);
     return convertEntityToDto(childEntity);
-
   }
 
   // Buscar por todas as crianças baseado no ID do usuário
-  public Iterable<ChildResponse> listAll(Integer userId) {
+  public List<ChildResponse> list(Integer userId) {
     Iterable<ChildEntity> entity = childRepository.findAllByUserId(userId);
-
+    List<ChildResponse> response = new ArrayList<>();
+    for (ChildEntity entityChild : entity) {
+      response.add(convertEntityToDto(entityChild));
+    }
+    return response;
   }
 
   // Buscar por todas as crianças cadastradas
-  public Iterable<ChildResponse> listAll() {
-    return childRepository.findAll();
+  public List<ChildResponse> listAll() {
+    // Obtendo o objeto de autenticação atual
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new SecurityException("Usuário não autenticado");
+    }
+
+    // Verificando se o usuário possui as ROLES necessárias
+    boolean hasAdminRole = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    boolean hasProfessionalRole = authentication.getAuthorities()
+        .contains(new SimpleGrantedAuthority("ROLE_PROFESSIONAL"));
+
+    if (!hasAdminRole && !hasProfessionalRole) {
+      throw new SecurityException("Usuário não autorizado");
+    }
+
+    Iterable<ChildEntity> entity = childRepository.findAll();
+    List<ChildResponse> response = new ArrayList<>();
+    for (ChildEntity entityChild : entity) {
+      response.add(convertEntityToDto(entityChild));
+    }
+    return response;
   }
 
   private ChildResponse convertEntityToDto(ChildEntity entity) {

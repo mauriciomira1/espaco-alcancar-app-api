@@ -33,6 +33,7 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.POST, "/dashboard/rate/new").authenticated()
               .requestMatchers(HttpMethod.GET, "/dashboard/rate/list-all").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").authenticated()
+              .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated();
           auth.anyRequest().authenticated();
         })
