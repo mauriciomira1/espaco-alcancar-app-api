@@ -21,7 +21,7 @@ import lombok.Setter;
 
 @Entity
 @Data
-public class SensoryProfile {
+public class SensoryProfileEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

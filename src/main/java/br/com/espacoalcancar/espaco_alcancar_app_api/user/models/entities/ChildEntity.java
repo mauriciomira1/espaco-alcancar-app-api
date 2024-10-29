@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfile;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +43,7 @@ public class ChildEntity {
   private UserEntity user;
 
   @OneToMany(mappedBy = "child")
-  private List<SensoryProfile> sensoryProfile;
+  private List<SensoryProfileEntity> sensoryProfile;
 
   @Enumerated(EnumType.STRING)
   private Gender gender;
