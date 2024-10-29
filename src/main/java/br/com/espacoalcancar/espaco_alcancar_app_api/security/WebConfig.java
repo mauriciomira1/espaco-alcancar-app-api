@@ -6,7 +6,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
   @Override
   public void addCorsMappings(@SuppressWarnings("null") CorsRegistry registry) {
     registry.addMapping("/**") // Permite todas as rotas

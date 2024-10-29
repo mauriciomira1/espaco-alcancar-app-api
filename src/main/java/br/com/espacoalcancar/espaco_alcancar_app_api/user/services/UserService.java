@@ -87,9 +87,7 @@ public class UserService {
 
   // Obter usuário atual
   public UserDashboardResponse getCurrentUser() {
-    // Obtendo o objeto de autenticação atual
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     if (authentication == null || !authentication.isAuthenticated()) {
       throw new RuntimeException("User is not authenticated");
     }
@@ -99,8 +97,7 @@ public class UserService {
       throw new RuntimeException("User principal is not of expected type");
     }
 
-    var userId = principal.getId();
-    return findById(userId);
+    return principal;
   }
 
   // Classe acessória para conversão de UserEntity para UserResponse

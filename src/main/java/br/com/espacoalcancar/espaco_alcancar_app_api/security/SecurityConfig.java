@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -12,6 +13,7 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.providers.JWTProvider;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
   @Autowired
@@ -29,16 +31,13 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> {
           auth.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
               .requestMatchers(HttpMethod.POST, "/auth").permitAll()
-              .requestMatchers(HttpMethod.POST, "/dashboard/user/edit").authenticated()
-              .requestMatchers(HttpMethod.POST, "/dashboard/rate/new").authenticated()
-              .requestMatchers(HttpMethod.GET, "/dashboard/rate/list-all").authenticated()
-              .requestMatchers(HttpMethod.GET, "/user/children/list-all").authenticated()
-              .requestMatchers(HttpMethod.GET, "/user/children/list").hasAnyRole("ADMIN", "PROFESSIONAL")
+              .requestMatchers("/dashboard/**").authenticated()
+              .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
+              .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated();
           auth.anyRequest().authenticated();
         })
         .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
     return http.build();
   }
-
 }
