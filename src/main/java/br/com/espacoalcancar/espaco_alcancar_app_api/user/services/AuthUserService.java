@@ -28,6 +28,9 @@ public class AuthUserService {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
+  @Autowired
+  private UserService userService;
+
   @Value("${security.token.secret}")
   private String secretKey;
 
@@ -45,10 +48,8 @@ public class AuthUserService {
     if (!passwordMatches) {
       throw new AuthenticationException("User/password incorrect.");
     }
-    System.out.println("------------------1111111111111111111--------------------------------------------");
-    System.out.println(user.getEmail());
 
-    List<String> roles = new UserService().getUserRoles(user.getEmail());
+    List<String> roles = userService.getUserRoles(user.getEmail());
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var token = JWT

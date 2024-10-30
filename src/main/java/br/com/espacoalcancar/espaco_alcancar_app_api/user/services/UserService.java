@@ -38,13 +38,13 @@ public class UserService {
       List<String> roles = new ArrayList<>();
 
       if (user.get().getProfileType().isAdmin()) {
-        roles.add("ROLE_ADMIN");
+        roles.add("ADMIN");
       }
       if (user.get().getProfileType().isProfessional()) {
-        roles.add("ROLE_PROFESSIONAL");
+        roles.add("PROFESSIONAL");
       }
       if (user.get().getProfileType().isPatient()) {
-        roles.add("ROLE_PATIENT");
+        roles.add("PATIENT");
       }
       return roles;
     }
