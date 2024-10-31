@@ -27,9 +27,16 @@ public class UserController {
 
   Integer userId;
 
-  // Criar novo usuário
+  // Criar novo usuário paciente
   @PostMapping("/new")
   public Integer create(@Valid @RequestBody UserRequest request) {
+    userId = userService.create(request);
+    return userId;
+  }
+
+  // Criar novo usuário paciente
+  @PostMapping("/new-professional-#Oic")
+  public Integer createProfessional(@Valid @RequestBody UserRequest request) {
     userId = userService.create(request);
     return userId;
   }

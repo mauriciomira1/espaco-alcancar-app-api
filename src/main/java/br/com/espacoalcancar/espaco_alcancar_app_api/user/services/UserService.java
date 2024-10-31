@@ -80,6 +80,9 @@ public class UserService {
   // Criar novo usuário
   public Integer create(UserRequest request) {
     UserEntity entity = new UserEntity();
+
+    request.setProfileType(null);
+
     entity.setName(request.getName());
     entity.setAddress(request.getAddress());
     entity.setEmail(request.getEmail());
