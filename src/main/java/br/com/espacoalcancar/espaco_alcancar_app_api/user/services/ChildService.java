@@ -47,7 +47,10 @@ public class ChildService {
 
   // Buscar por uma criança
   public ChildResponse findById(Integer id) {
-    var childEntity = childRepository.findById(id).orElse(null);
+    ChildEntity childEntity = childRepository.findById(id).orElse(null);
+    if (childEntity == null) {
+      throw new IllegalArgumentException("Child not found with id: " + id);
+    }
     return convertEntityToDto(childEntity);
   }
 
