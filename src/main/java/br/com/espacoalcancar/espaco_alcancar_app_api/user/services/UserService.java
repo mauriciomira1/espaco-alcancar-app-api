@@ -32,7 +32,7 @@ public class UserService {
   public List<String> getUserRoles(String email) {
     Optional<UserEntity> user = repository.findByEmail(email);
     if (user.isEmpty()) {
-      throw new UsernameNotFoundException("User not found");
+      throw new UsernameNotFoundException("User not autenticated");
     } else {
 
       List<String> roles = new ArrayList<>();
@@ -96,7 +96,7 @@ public class UserService {
   // Editar dados do usuário
   public UserDashboardResponse updateUser(Integer userId, UserRequest request) {
     UserEntity userEntity = repository.findById(userId)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        .orElseThrow(() -> new UsernameNotFoundException("User not autenticated"));
 
     BeanUtils.copyProperties(request, userEntity, "id", "password", "profileType", "email");
     if (request.getPassword() != null && !request.getPassword().isEmpty()) {
