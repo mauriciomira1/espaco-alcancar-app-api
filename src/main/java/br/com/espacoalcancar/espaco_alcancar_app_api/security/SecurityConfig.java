@@ -29,9 +29,13 @@ public class SecurityConfig {
         .cors(cors -> cors.configure(http))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> {
+
+          /* Requisições POST */
           auth.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
               .requestMatchers(HttpMethod.POST, "/auth").permitAll()
               .requestMatchers("/dashboard/**").authenticated()
+
+              /* Requisições GET */
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated();
