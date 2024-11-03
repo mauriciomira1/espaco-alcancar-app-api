@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/dashboard/fillout/sensory-profile")
+@RequestMapping("/dashboard/fillout")
 public class SensoryProfileController {
 
-  @PostMapping("")
+  @PostMapping("/sensory-profile")
   public Integer create(@RequestBody SensoryProfileRequest request) {
 
     return null;

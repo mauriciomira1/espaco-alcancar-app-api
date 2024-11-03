@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +29,22 @@ public class ChildService {
 
   // Adicionar um filho
   public Integer create(ChildRequest request, HttpServletRequest httpServletRequest) {
-
     // Recuperando o ID do usuário configurado no SecurityFilter.java
     var userIdObject = httpServletRequest.getAttribute("user_id");
     Integer userId = Integer.valueOf(userIdObject.toString());
 
-    UserEntity userEntity = userRepository.findById(userId).orElse(null);
+    UserEntity userEntity = userRepository.findById(userId)
+        .orElseThrow(() -> new UsernameNotFoundException("Child not found with this id."));
+
+    String firstName = request.getName().split(" ")[0];
+
+    var childs = userEntity.getChildren();
+    for (ChildEntity child : childs) {
+
+      if (child.getName().contains(firstName)) {
+        throw new IllegalArgumentException("Child already exists with name: " + firstName);
+      }
+    }
 
     ChildEntity entity = new ChildEntity();
 
@@ -90,6 +101,7 @@ public class ChildService {
     return response;
   }
 
+  // Classe acessória para converter Entity em DTO
   private ChildResponse convertEntityToDto(ChildEntity entity) {
     ChildResponse response = new ChildResponse();
     response.setId(entity.getId());
@@ -99,4 +111,23 @@ public class ChildService {
     return response;
   }
 
+  // Atualizar um filho
+  public Integer update(ChildRequest request, HttpServletRequest httpServletRequest, Integer childId) {
+    // Recuperando o ID do usuário configurado no SecurityFilter.java
+    var userIdObject = httpServletRequest.getAttribute("user_id");
+    Integer userId = Integer.valueOf(userIdObject.toString());
+
+    UserEntity userEntity = userRepository.findById(userId)
+        .orElseThrow(() -> new UsernameNotFoundException("Child not found with this id."));
+
+    ChildEntity entity = childRepository.findById(request.getId())
+        .orElseThrow(() -> new UsernameNotFoundException("Child not found with this id."));
+
+    entity.setBirth(request.getBirth());
+    entity.setName(request.getName());
+    entity.setGender(request.getGender());
+    entity.setUser(userEntity);
+
+    return childRepository.save(entity).getId();
+  }
 }
