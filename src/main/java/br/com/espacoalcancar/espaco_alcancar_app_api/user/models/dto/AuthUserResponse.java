@@ -7,6 +7,7 @@ import lombok.Data;
 public class AuthUserResponse {
 
   private String token;
+  private String refreshToken;
   private List<String> roles;
 
 }
