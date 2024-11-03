@@ -3,6 +3,8 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 import javax.naming.AuthenticationException;
@@ -34,6 +36,9 @@ public class AuthUserService {
   @Value("${security.token.secret}")
   private String secretKey;
 
+  @Value("${security.refreshToken.secret}")
+  private String refreshSecretKey;
+
   // Autenticação do usuário
   public AuthUserResponse execute(AuthUserRequest authUserRequest) throws AuthenticationException {
 
@@ -51,12 +56,15 @@ public class AuthUserService {
 
     List<String> roles = userService.getUserRoles(user.getEmail());
 
-    // Gerando token
-    var token = jwt.generateToken(user);
+    // Gerando token e refreshToken
+    String token = jwt.generateToken(user.getId(), Instant.now().plus(Duration.ofHours(2)));
+    String refreshToken = jwt.generateToken(user.getId(), Instant.now().plus(Duration.ofDays(2)));
 
     AuthUserResponse response = new AuthUserResponse();
     response.setToken(token);
+    response.setRefreshToken(refreshToken);
     response.setRoles(roles);
+
     return response;
   }
 }

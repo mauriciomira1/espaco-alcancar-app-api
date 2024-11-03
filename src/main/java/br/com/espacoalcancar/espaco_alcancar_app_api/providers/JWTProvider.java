@@ -1,6 +1,5 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.providers;
 
-import java.time.Duration;
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,21 +9,19 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
-
 @Service
 public class JWTProvider {
 
   @Value("${security.token.secret}")
   private String secretKey;
 
-  public String generateToken(UserEntity subject) {
+  public String generateToken(Integer userId, Instant expiration) {
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var token = JWT
         .create()
         .withIssuer("espaco-alcancar")
-        .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
-        .withSubject(subject.getId().toString())
+        .withExpiresAt(expiration)
+        .withSubject(userId.toString())
         .sign(algorithm);
 
     return token;
@@ -39,7 +36,7 @@ public class JWTProvider {
           .build()
           .verify(token)
           .getSubject();
-      return subject;
+      return subject; // ID do usuário
     } catch (JWTVerificationException e) {
       return null;
     }
