@@ -33,4 +33,10 @@ public class UserExceptionHandler {
     return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(UserAlreadyExistsException.class)
+  public ResponseEntity<ErrorMessageDTO> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
+    ErrorMessageDTO error = new ErrorMessageDTO(e.getMessage(), "email");
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+  }
+
 }

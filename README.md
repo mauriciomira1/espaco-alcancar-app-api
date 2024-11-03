@@ -18,6 +18,7 @@
 - JWT para geração de token de autenticação
 - Jpa e Hibernate para DB
 - Docker compose para criar container e facilitar criação do projeto em outros sistemas
+- Sonarqube para avaliação de qualidade de código, falhas de segurança, erros, etc.
 
 ## Como inicializar o projeto
 

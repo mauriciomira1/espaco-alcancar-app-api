@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserResponse;
@@ -81,7 +82,7 @@ public class UserService {
   public Integer create(UserRequest request) {
     UserEntity entity = new UserEntity();
 
-    request.setProfileType(null);
+    request.setProfileType(new ProfileType(true, false, false));
 
     entity.setName(request.getName());
     entity.setAddress(request.getAddress());
@@ -141,7 +142,6 @@ public class UserService {
     response.setAddress(userEntity.getAddress());
     response.setEmail(userEntity.getEmail());
     response.setPhone(userEntity.getPhone());
-    response.setChildren(userEntity.getChildren());
     response.setProfileType(userEntity.getProfileType());
     response.setRelationship(userEntity.getRelationship());
     response.setPassword(userEntity.getPassword());
