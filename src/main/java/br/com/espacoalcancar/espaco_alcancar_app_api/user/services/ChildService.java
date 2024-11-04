@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildResponse;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildUpdate;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.ChildRepository;
@@ -112,13 +113,13 @@ public class ChildService {
   }
 
   // Atualizar um filho
-  public Integer update(ChildRequest request, HttpServletRequest httpServletRequest, Integer childId) {
-    // Recuperando o ID do usuário configurado no SecurityFilter.java
-    var userIdObject = httpServletRequest.getAttribute("user_id");
-    Integer userId = Integer.valueOf(userIdObject.toString());
+  public Integer update(ChildUpdate request) {
 
-    UserEntity userEntity = userRepository.findById(userId)
-        .orElseThrow(() -> new UsernameNotFoundException("Child not found with this id."));
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new RuntimeException("User is not authenticated");
+    }
 
     ChildEntity entity = childRepository.findById(request.getId())
         .orElseThrow(() -> new UsernameNotFoundException("Child not found with this id."));
@@ -126,7 +127,6 @@ public class ChildService {
     entity.setBirth(request.getBirth());
     entity.setName(request.getName());
     entity.setGender(request.getGender());
-    entity.setUser(userEntity);
 
     return childRepository.save(entity).getId();
   }

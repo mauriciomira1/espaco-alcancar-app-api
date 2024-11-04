@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildResponse;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildUpdate;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.ChildService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,9 +65,9 @@ public class ChildController {
     return childService.listAll();
   }
 
-  @PutMapping("/update")
-  public Integer update(@Valid @RequestBody ChildRequest childRequest, HttpServletRequest request) {
-    return this.childService.update(childRequest, request);
+  // Atualizar um dependente
+  @PutMapping("/edit")
+  public Integer update(@Valid @RequestBody ChildUpdate childUpdate) {
+    return this.childService.update(childUpdate);
   }
-
 }
