@@ -130,4 +130,19 @@ public class ChildService {
 
     return childRepository.save(entity).getId();
   }
+
+  // Remover um filho
+  public void remove(Integer childId) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new RuntimeException("User is not authenticated");
+    }
+
+    ChildEntity entity = childRepository.findById(childId)
+        .orElseThrow(() -> new UsernameNotFoundException("Child not found with this id."));
+
+    childRepository.delete(entity);
+  }
 }
