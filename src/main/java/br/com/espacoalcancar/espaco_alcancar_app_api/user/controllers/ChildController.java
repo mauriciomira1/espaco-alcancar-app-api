@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,5 +70,11 @@ public class ChildController {
   @PutMapping("/edit")
   public Integer update(@Valid @RequestBody ChildUpdate childUpdate) {
     return this.childService.update(childUpdate);
+  }
+
+  // Remover um dependente
+  @DeleteMapping("/remove")
+  public void remove(@Valid @RequestBody Integer childId) {
+    this.childService.remove(childId);
   }
 }
