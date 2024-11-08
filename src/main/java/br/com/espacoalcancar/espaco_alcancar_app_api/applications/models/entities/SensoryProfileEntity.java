@@ -4,15 +4,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -21,6 +23,7 @@ import lombok.Setter;
 
 @Entity
 @Data
+@Table(name = "tab_sensory_profile")
 public class SensoryProfileEntity {
 
   @Id
@@ -34,13 +37,11 @@ public class SensoryProfileEntity {
   @Enumerated(EnumType.STRING)
   private SensoryProfileType profileType;
 
-  @ElementCollection
-  private List<Question> questions;
-
-  @Embedded
-  private ResultsOfSensoryProfile resultsOfSensoryProfile;
+  @OneToMany(mappedBy = "resultsOfSensoryProfile")
+  private List<ResultsOfSensoryProfile> resultsOfSensoryProfile;
 
   @ManyToOne(optional = false)
+  @JoinColumn(name = "child_id")
   private ChildEntity child;
 
   private LocalDateTime createdAt;
