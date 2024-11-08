@@ -15,7 +15,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tab_results_of_sensory_profile")
-public class ResultsOfSensoryProfile {
+public class ResultsOfSensoryProfileEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +26,5 @@ public class ResultsOfSensoryProfile {
 
   @ManyToOne
   @JoinColumn(name = "sensory_profile_id")
-  private SensoryProfileEntity sensoryProfileEntity;
+  private SensoryProfileEntity sensoryProfile;
 }

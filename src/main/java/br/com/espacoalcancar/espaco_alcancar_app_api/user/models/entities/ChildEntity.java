@@ -3,7 +3,6 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
