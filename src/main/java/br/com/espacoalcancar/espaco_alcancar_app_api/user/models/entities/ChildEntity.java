@@ -2,7 +2,11 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Gender;
@@ -10,6 +14,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,8 +47,9 @@ public class ChildEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @OneToMany(mappedBy = "child")
-  private List<SensoryProfileEntity> sensoryProfile;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
+  private Set<SensoryProfileEntity> sensoryProfiles = new HashSet<>();
 
   @Enumerated(EnumType.STRING)
   private Gender gender;
