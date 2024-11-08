@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.ResultsOfSensoryProfile;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.ResultsOfSensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.Status;
@@ -38,9 +38,9 @@ public class SensoryProfileService {
 
     sensoryProfile = sensoryProfileRepository.save(sensoryProfile);
 
-    ResultsOfSensoryProfile results = new ResultsOfSensoryProfile();
+    ResultsOfSensoryProfileEntity results = new ResultsOfSensoryProfileEntity();
     results.setAnswers(request.getAnswers());
-    results.setSensoryProfileEntity(sensoryProfile);
+    results.setSensoryProfile(sensoryProfile);
 
     return sensoryProfile.getId();
   }

@@ -37,8 +37,8 @@ public class SensoryProfileEntity {
   @Enumerated(EnumType.STRING)
   private SensoryProfileType profileType;
 
-  @OneToMany(mappedBy = "resultsOfSensoryProfile")
-  private List<ResultsOfSensoryProfile> resultsOfSensoryProfile;
+  @OneToMany(mappedBy = "sensoryProfile")
+  private List<ResultsOfSensoryProfileEntity> resultsOfSensoryProfile;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "child_id")
