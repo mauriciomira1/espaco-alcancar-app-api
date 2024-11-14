@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.ResultsOfSensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.Status;
@@ -30,17 +29,10 @@ public class SensoryProfileService {
     sensoryProfile.setChild(childRepository.findById(request.getChildId()).get());
     sensoryProfile.setProfileType(request.getProfileType());
     sensoryProfile.setCreatedAt(LocalDateTime.now());
-
-    int expectedQuestions = getExpectedQuestions(request.getProfileType());
-    if (request.getAnswers().size() != expectedQuestions) {
-      throw new IllegalArgumentException("Número de respostas não corresponde ao número esperado de perguntas.");
-    }
+    sensoryProfile.setUpdatedAt(LocalDateTime.now());
+    sensoryProfile.setResultsOfSensoryProfile("");
 
     sensoryProfile = sensoryProfileRepository.save(sensoryProfile);
-
-    ResultsOfSensoryProfileEntity results = new ResultsOfSensoryProfileEntity();
-    results.setAnswers(request.getAnswers());
-    results.setSensoryProfile(sensoryProfile);
 
     return sensoryProfile.getId();
   }

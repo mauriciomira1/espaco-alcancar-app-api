@@ -33,6 +33,7 @@ public class SecurityConfig {
           /* Requisições POST */
           auth.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
               .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+              .requestMatchers(HttpMethod.POST, "/dashboard/fillout/sensory-profile").authenticated()
               .requestMatchers("/dashboard/**").authenticated()
 
               /* Requisições GET */

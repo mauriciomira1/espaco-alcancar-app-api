@@ -1,7 +1,6 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
 
@@ -13,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -37,12 +35,12 @@ public class SensoryProfileEntity {
   @Enumerated(EnumType.STRING)
   private SensoryProfileType profileType;
 
-  @OneToMany(mappedBy = "sensoryProfile")
-  private List<ResultsOfSensoryProfileEntity> resultsOfSensoryProfile;
+  private String resultsOfSensoryProfile;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "child_id")
   private ChildEntity child;
 
   private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 }
