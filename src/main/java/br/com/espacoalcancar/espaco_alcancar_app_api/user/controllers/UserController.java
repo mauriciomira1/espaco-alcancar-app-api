@@ -34,13 +34,6 @@ public class UserController {
     return userId;
   }
 
-  // Criar novo usuário paciente
-  @PostMapping("/new-professional-#Oic")
-  public Integer createProfessional(@Valid @RequestBody UserRequest request) {
-    userId = userService.create(request);
-    return userId;
-  }
-
   // Buscar usuário
   @GetMapping("/me")
   public UserDashboardResponse getCurrentUser() {
