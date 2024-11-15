@@ -1,20 +1,16 @@
-package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
+package br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.entities;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Address;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Relationship;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -24,8 +20,8 @@ import lombok.Setter;
 
 @Entity
 @Data
-@Table(name = "tab_user")
-public class UserEntity {
+@Table(name = "tab_professional")
+public class ProfessionalEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,19 +40,22 @@ public class UserEntity {
   @Column(length = 100, nullable = false)
   private String password;
 
-  @OneToMany(mappedBy = "user")
-  private List<ChildEntity> children;
+  @Column(nullable = false)
+  private boolean active; // Para desativar um profissional
 
-  @Enumerated(EnumType.STRING)
-  private Relationship relationship;
+  @Temporal(TemporalType.DATE)
+  private LocalDate birth;
 
-  @Embedded
-  private Address address;
+  @Column(length = 14)
+  private String registerNumber; // número de registro no conselho de saúde
+
+  @Column(length = 30, nullable = false)
+  private String occupation; // "Fisioterapeuta", "Psicólogo", "Nutricionista", etc.
 
   @Embedded
   private ProfileType profileType;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column(nullable = false, updatable = false)
-  private Date createdAt = new Date();
+  private LocalDateTime createdAt;
 }
