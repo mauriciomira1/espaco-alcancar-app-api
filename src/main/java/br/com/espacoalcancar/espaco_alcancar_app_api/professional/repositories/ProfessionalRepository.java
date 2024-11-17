@@ -10,4 +10,6 @@ public interface ProfessionalRepository extends JpaRepository<ProfessionalEntity
 
   public List<ProfessionalEntity> findByActiveTrue();
 
+  public ProfessionalEntity findByEmail(String email);
+
 }
