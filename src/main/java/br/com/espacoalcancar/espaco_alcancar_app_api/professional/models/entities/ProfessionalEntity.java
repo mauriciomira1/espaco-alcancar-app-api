@@ -2,7 +2,6 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.entiti
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import jakarta.persistence.Column;

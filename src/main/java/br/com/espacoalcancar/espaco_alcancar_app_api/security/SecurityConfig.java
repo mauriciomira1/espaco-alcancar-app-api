@@ -35,6 +35,7 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.POST, "/auth").permitAll()
               .requestMatchers(HttpMethod.POST, "/dashboard/fillout/sensory-profile").authenticated()
               .requestMatchers("/dashboard/**").authenticated()
+              .requestMatchers("/professional/**").permitAll()
 
               /* Requisições GET */
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
