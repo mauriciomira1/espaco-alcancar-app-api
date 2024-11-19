@@ -3,6 +3,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.applications.services;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
@@ -10,6 +11,7 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entitie
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.Status;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.repositories.SensoryProfileRepository;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.ChildRepository;
 
 @Service
@@ -24,14 +26,16 @@ public class SensoryProfileService {
   // Criar novo perfil sensorial
   public Integer create(SensoryProfileRequest request) {
 
+    ChildEntity child = childRepository.findById(request.getChildId())
+        .orElseThrow(() -> new UsernameNotFoundException("Dependente não encontrado."));
+
     SensoryProfileEntity sensoryProfile = new SensoryProfileEntity();
     sensoryProfile.setStatus(Status.UNFILLED);
-    sensoryProfile.setChild(childRepository.findById(request.getChildId()).get());
+    sensoryProfile.setChild(child);
     sensoryProfile.setProfileType(request.getProfileType());
     sensoryProfile.setCreatedAt(LocalDateTime.now());
     sensoryProfile.setUpdatedAt(LocalDateTime.now());
     sensoryProfile.setResultsOfSensoryProfile("");
-
     sensoryProfile = sensoryProfileRepository.save(sensoryProfile);
 
     return sensoryProfile.getId();
