@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SensoryProfileRequest {
-
   private SensoryProfileType profileType;
   private Integer childId;
 }

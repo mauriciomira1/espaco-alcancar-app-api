@@ -33,13 +33,19 @@ public class SecurityConfig {
         .cors(cors -> cors.configure(http))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> {
-          /* Requisições POST */
-          auth.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
-              .requestMatchers(HttpMethod.POST, "/auth").permitAll()
-              .requestMatchers(HttpMethod.POST, "/dashboard/fillout/sensory-profile").authenticated()
+
+          auth
               .requestMatchers("/dashboard/**").authenticated()
               .requestMatchers("/professional/**").permitAll()
               .requestMatchers("/auth/**").permitAll()
+              /* Requisições POST */
+              .requestMatchers(HttpMethod.POST, "/user/new").permitAll()
+              .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+              .requestMatchers(HttpMethod.POST, "/dashboard/fillout/sensory-profile")
+              .hasAnyRole("ADMIN", "PROFESSIONAL")
+
+              /* Requisições PUT */
+              .requestMatchers(HttpMethod.PUT, "/dashboard/fillout/sensory-profile").hasAnyRole("PATIENT")
               /* Requisições GET */
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")

@@ -30,10 +30,9 @@ public class SensoryProfileController {
     return sensoryProfileService.create(request);
   }
 
-  // Preencher um perfil sensorial (paciente)
+  // Preencher um perfil sensorial (perfil: paciente)
   @PutMapping("/sensory-profile")
   public void fillOut(@Valid @RequestBody ResultsRequestDTO results) {
     resultsOfSensoryProfileService.create(results);
   }
-
 }
