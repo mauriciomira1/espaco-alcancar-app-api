@@ -66,7 +66,8 @@ public class ChildService {
     return convertEntityToDto(childEntity);
   }
 
-  // Buscar por todas as crianças baseado no ID do usuário
+  // Buscar por todas as crianças baseado no ID do usuário (requere
+  // ROLE_PROFESSIONAL ou ROLE_ADMIN)
   public List<ChildResponse> list(Integer userId) {
     Iterable<ChildEntity> entity = childRepository.findAllByUserId(userId);
     List<ChildResponse> response = new ArrayList<>();

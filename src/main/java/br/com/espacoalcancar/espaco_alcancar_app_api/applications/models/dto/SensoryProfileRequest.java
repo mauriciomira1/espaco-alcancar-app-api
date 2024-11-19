@@ -1,7 +1,6 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SensoryProfileRequest {
 
-  private Status status;
   private SensoryProfileType profileType;
   private Integer childId;
 }

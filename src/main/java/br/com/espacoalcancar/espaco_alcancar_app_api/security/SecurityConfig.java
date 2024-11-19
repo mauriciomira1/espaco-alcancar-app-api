@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.professional.services.ProfessionalService;
 import br.com.espacoalcancar.espaco_alcancar_app_api.providers.JWTProvider;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
 
@@ -22,14 +23,16 @@ public class SecurityConfig {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private ProfessionalService professionalService;
+
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    SecurityFilter securityFilter = new SecurityFilter(jwtProvider, userService);
+    SecurityFilter securityFilter = new SecurityFilter(jwtProvider, userService, professionalService);
     http
         .cors(cors -> cors.configure(http))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> {
-
           /* Requisições POST */
           auth.requestMatchers(HttpMethod.POST, "/user/new").permitAll()
               .requestMatchers(HttpMethod.POST, "/auth").permitAll()
@@ -37,7 +40,6 @@ public class SecurityConfig {
               .requestMatchers("/dashboard/**").authenticated()
               .requestMatchers("/professional/**").permitAll()
               .requestMatchers("/auth/**").permitAll()
-
               /* Requisições GET */
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
