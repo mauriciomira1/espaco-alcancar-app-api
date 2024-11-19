@@ -3,7 +3,6 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.professional.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +47,25 @@ public class ProfessionalController {
       return ResponseEntity.ok().body("Profissional desarquivado com sucesso");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao desarquivar profissional");
+    }
+  }
+
+  // Buscar um profissional
+  public ResponseEntity<ProfessionalEntity> get(Integer id) {
+    try {
+      return ResponseEntity.ok().body(professionalService.getProfessional(id));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+  }
+
+  // Atualizar um profissional
+  public ResponseEntity<String> update(Integer id, NewProfessionalDTO request) {
+    try {
+      professionalService.updateProfessional(id, request);
+      return ResponseEntity.ok().body("Profissional atualizado com sucesso");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar profissional");
     }
   }
 }

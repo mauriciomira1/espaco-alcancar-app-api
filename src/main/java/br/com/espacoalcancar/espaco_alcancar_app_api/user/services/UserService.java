@@ -30,6 +30,7 @@ public class UserService {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
+  // Obter os papéis do usuário
   public List<String> getUserRoles(String email) {
     Optional<UserEntity> user = repository.findByEmail(email);
     if (user.isEmpty()) {

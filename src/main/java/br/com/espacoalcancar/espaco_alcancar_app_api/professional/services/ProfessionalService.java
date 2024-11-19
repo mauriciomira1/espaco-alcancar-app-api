@@ -1,9 +1,12 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.professional.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.exceptions.ProfessionalAlreadyExists;
@@ -18,12 +21,17 @@ public class ProfessionalService {
   @Autowired
   ProfessionalRepository professionalRepository;
 
+  @Autowired
+  PasswordEncoder passwordEncoder;
+
   // Adicionar um profissional
   public String addProfessional(NewProfessionalDTO newProfessional) {
     // Verificar se o email já está cadastrado
     if (professionalRepository.findByEmail(newProfessional.getEmail()) != null) {
       throw new ProfessionalAlreadyExists("Email já cadastrado");
     }
+
+    newProfessional.setPassword(passwordEncoder.encode(newProfessional.getPassword()));
 
     professionalRepository.save(convertDtoToEntity(newProfessional));
     return "Profissional cadastrado com sucesso";
@@ -83,6 +91,28 @@ public class ProfessionalService {
     entity.setCreatedAt(LocalDateTime.now());
     entity.setProfileType(new ProfileType(false, true, false));
     return entity;
+  }
+
+  // Função acessória para obter os papéis do usuário
+  public List<String> getUserRoles(String email) {
+    ProfessionalEntity professional = professionalRepository.findByEmail(email);
+    if (professional == null) {
+      throw new UsernameNotFoundException("User not autenticated");
+    } else {
+
+      List<String> roles = new ArrayList<>();
+
+      if (professional.getProfileType().isAdmin()) {
+        roles.add("ADMIN");
+      }
+      if (professional.getProfileType().isProfessional()) {
+        roles.add("PROFESSIONAL");
+      }
+      if (professional.getProfileType().isPatient()) {
+        roles.add("PATIENT");
+      }
+      return roles;
+    }
   }
 
 }
