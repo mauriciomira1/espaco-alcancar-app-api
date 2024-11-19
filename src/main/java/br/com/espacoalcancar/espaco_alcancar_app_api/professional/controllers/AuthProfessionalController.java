@@ -1,9 +1,6 @@
-package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
+package br.com.espacoalcancar.espaco_alcancar_app_api.professional.controllers;
 
 import java.time.Duration;
-import java.time.Instant;
-
-import javax.naming.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,29 +9,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.dto.AuthProfessionalRequest;
+import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.dto.AuthProfessionalResponse;
+import br.com.espacoalcancar.espaco_alcancar_app_api.professional.services.AuthProfessionalService;
 import br.com.espacoalcancar.espaco_alcancar_app_api.providers.JWTProvider;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserRequest;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserResponse;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.AuthUserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-public class AuthUserController {
+public class AuthProfessionalController {
 
   @Autowired
-  AuthUserService authService;
+  AuthProfessionalService authService;
 
   @Autowired
   JWTProvider jwt;
 
-  // Login de usuário
-  @PostMapping("/auth")
-  public ResponseEntity<Object> create(@RequestBody AuthUserRequest request, HttpServletResponse response)
-      throws AuthenticationException {
+  // Login de profissional
+  @PostMapping("/auth/professional")
+  public ResponseEntity<Object> create(@RequestBody AuthProfessionalRequest request, HttpServletResponse response) {
     try {
-      AuthUserResponse result = this.authService.execute(request);
+      AuthProfessionalResponse result = this.authService.execute(request);
 
       Cookie refreshTokenCookie = new Cookie("refreshToken", result.getRefreshToken());
       refreshTokenCookie.setHttpOnly(true);
@@ -49,7 +45,8 @@ public class AuthUserController {
     }
   }
 
-  @PostMapping("/auth/refresh")
+  // Atualização do token
+  @PostMapping("/auth/professional/refresh")
   public ResponseEntity<Object> refresh(HttpServletRequest request, HttpServletResponse response) {
     try {
       // Obtendo o refresh token do cookie
@@ -68,27 +65,17 @@ public class AuthUserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token not found.");
       }
 
-      String userId = this.jwt.validateToken(refreshToken);
-      if (userId == null) {
+      String professionalId = this.jwt.validateToken(refreshToken);
+      if (professionalId == null) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token.");
       }
 
-      // Gerando novos tokens
-      String newToken = this.jwt.generateToken(Integer.parseInt(userId), Instant.now().plus(Duration.ofHours(2)));
-      String newRefreshToken = this.jwt.generateToken(Integer.parseInt(userId),
-          Instant.now().plus(Duration.ofDays(30)));
-
-      // Atualizando o refresh token no cookie
-      Cookie newRefreshTokenCookie = new Cookie("refreshToken", newRefreshToken);
-      newRefreshTokenCookie.setHttpOnly(true);
-      newRefreshTokenCookie.setSecure(true);
-      newRefreshTokenCookie.setPath("/");
-      newRefreshTokenCookie.setMaxAge((int) Duration.ofDays(30).getSeconds());
-      response.addCookie(newRefreshTokenCookie);
+      String newToken = this.authService.refreshToken(professionalId);
 
       return ResponseEntity.ok().body(newToken);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
   }
+
 }
