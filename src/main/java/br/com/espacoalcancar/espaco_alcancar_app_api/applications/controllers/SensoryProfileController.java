@@ -67,4 +67,16 @@ public class SensoryProfileController {
     List<SensoryProfileEntity> response = sensoryProfileService.listAll();
     return ResponseEntity.ok().body(response);
   }
+
+  // Preencher um perfil sensorial (perfil: paciente)
+  @PutMapping("/fill-out-sensory-profile")
+  public ResponseEntity<String> fillOutSensoryProfile(@Valid @RequestBody ResultsRequestDTO results) {
+    try {
+      resultsOfSensoryProfileService.create(results);
+      return ResponseEntity.ok().body("Perfil sensorial preenchido com sucesso.");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body("Erro ao preencher perfil sensorial.");
+    }
+  }
+
 }

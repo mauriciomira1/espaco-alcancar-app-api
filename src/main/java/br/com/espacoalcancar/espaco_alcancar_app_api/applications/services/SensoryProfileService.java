@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
@@ -72,8 +73,28 @@ public class SensoryProfileService {
       instant.setResultsOfSensoryProfile(entity.getResultsOfSensoryProfile());
       response.add(instant);
     });
-
     return response;
+  }
+
+  // Preencher um perfil sensorial
+  public void fillOut(ResultsRequestDTO results) {
+    SensoryProfileEntity sensoryProfile = sensoryProfileRepository.findById(results.getSensoryProfileId())
+        .orElseThrow(() -> new UsernameNotFoundException("Perfil sensorial não encontrado."));
+
+    // Verificando se o perfil sensorial foi preenchido completamente
+    var numberOfAnswersFilled = results.getAnswers().length();
+    if (numberOfAnswersFilled == 0) {
+      sensoryProfile.setStatus(Status.UNFILLED);
+    } else if (numberOfAnswersFilled == getExpectedQuestions(sensoryProfile.getProfileType())) {
+      sensoryProfile.setStatus(Status.FINISHED);
+    } else if (numberOfAnswersFilled > 0
+        && numberOfAnswersFilled < getExpectedQuestions(sensoryProfile.getProfileType())) {
+      sensoryProfile.setStatus(Status.STARTED);
+    }
+
+    sensoryProfile.setResultsOfSensoryProfile(results.getAnswers());
+    sensoryProfile.setUpdatedAt(LocalDateTime.now());
+    sensoryProfileRepository.save(sensoryProfile);
   }
 
   // Função auxiliar para obter o número esperado de perguntas com base no tipo de
