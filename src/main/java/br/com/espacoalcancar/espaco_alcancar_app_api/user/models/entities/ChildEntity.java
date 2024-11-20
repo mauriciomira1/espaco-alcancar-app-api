@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
@@ -44,10 +45,12 @@ public class ChildEntity {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
+  @JsonBackReference
   private UserEntity user;
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @OneToMany(mappedBy = "child", fetch = FetchType.LAZY)
+
   private Set<SensoryProfileEntity> sensoryProfiles = new HashSet<>();
 
   @Enumerated(EnumType.STRING)

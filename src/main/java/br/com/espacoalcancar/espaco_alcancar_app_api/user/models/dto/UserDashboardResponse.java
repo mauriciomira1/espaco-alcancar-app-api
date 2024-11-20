@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class UserDashboardResponse {
-
   private Integer id;
   private String name;
   private String phone;
@@ -16,5 +15,4 @@ public class UserDashboardResponse {
   private Relationship relationship;
   private Address address;
   private ProfileType profileType;
-
 }

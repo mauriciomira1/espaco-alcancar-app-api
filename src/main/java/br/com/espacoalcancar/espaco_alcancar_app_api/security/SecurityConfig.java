@@ -47,6 +47,9 @@ public class SecurityConfig {
               /* Requisições PUT */
               .requestMatchers(HttpMethod.PUT, "/dashboard/fillout/sensory-profile").hasAnyRole("PATIENT")
               /* Requisições GET */
+              .requestMatchers(HttpMethod.GET, "/dashboard/fillout/list-all-sensory-profiles-of-a-professional/**")
+              .hasAnyRole("ADMIN", "PROFESSIONAL")
+              .requestMatchers(HttpMethod.GET, "/dashboard/fillout/list-all-sensory-profiles").hasAnyRole("ADMIN")
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated();

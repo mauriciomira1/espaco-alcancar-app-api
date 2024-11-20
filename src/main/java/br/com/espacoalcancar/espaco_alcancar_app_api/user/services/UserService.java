@@ -119,7 +119,7 @@ public class UserService {
       throw new RuntimeException("User is not authenticated");
     }
 
-    var principal = (UserDashboardResponse) authentication.getPrincipal();
+    UserDashboardResponse principal = (UserDashboardResponse) authentication.getPrincipal();
     if (!(principal instanceof UserDashboardResponse)) {
       throw new RuntimeException("User principal is not of expected type");
     }

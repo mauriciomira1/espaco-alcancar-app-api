@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entiti
 
 import java.time.LocalDateTime;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.entities.ProfessionalEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
 
 import jakarta.persistence.Entity;
@@ -41,6 +42,11 @@ public class SensoryProfileEntity {
   @JoinColumn(name = "child_id")
   private ChildEntity child;
 
+  @ManyToOne
+  @JoinColumn(name = "professional_id")
+  private ProfessionalEntity professional;
+
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
 }

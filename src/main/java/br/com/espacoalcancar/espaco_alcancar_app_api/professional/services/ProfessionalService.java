@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -78,6 +80,16 @@ public class ProfessionalService {
     professionalRepository.save(entity);
   }
 
+  // Obter profissional atualmente logado
+  public ProfessionalEntity getCurrentProfessional() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null || !auth.isAuthenticated()) {
+      throw new RuntimeException("User is not authenticated");
+    }
+    ProfessionalEntity principal = (ProfessionalEntity) auth.getPrincipal();
+    return principal;
+  }
+
   // Função acessória p/ converter DTO em entidade
   private ProfessionalEntity convertDtoToEntity(NewProfessionalDTO newProfessional) {
     ProfessionalEntity entity = new ProfessionalEntity();
@@ -114,5 +126,7 @@ public class ProfessionalService {
       return roles;
     }
   }
+
+  // Listar todos os perfis sensoriais de um profissional
 
 }
