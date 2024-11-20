@@ -1,6 +1,9 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.Address;
@@ -45,6 +48,7 @@ public class UserEntity {
   private String password;
 
   @OneToMany(mappedBy = "user")
+  @JsonManagedReference
   private List<ChildEntity> children;
 
   @Enumerated(EnumType.STRING)
