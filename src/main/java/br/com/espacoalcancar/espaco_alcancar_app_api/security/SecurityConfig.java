@@ -45,7 +45,7 @@ public class SecurityConfig {
               .hasAnyRole("ADMIN", "PROFESSIONAL")
 
               /* Requisições PUT */
-              .requestMatchers(HttpMethod.PUT, "/dashboard/fillout/sensory-profile").hasAnyRole("PATIENT")
+              .requestMatchers(HttpMethod.PUT, "/dashboard/fillout/fill-out-sensory-profile").hasAnyRole("PATIENT")
               /* Requisições GET */
               .requestMatchers(HttpMethod.GET, "/dashboard/fillout/list-all-sensory-profiles-of-a-professional/**")
               .hasAnyRole("ADMIN", "PROFESSIONAL")
