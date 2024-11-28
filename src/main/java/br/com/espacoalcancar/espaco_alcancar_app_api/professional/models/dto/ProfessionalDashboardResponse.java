@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.dto;
 
 import java.time.LocalDate;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import lombok.Data;
 
 @Data
@@ -15,4 +16,5 @@ public class ProfessionalDashboardResponse {
   private LocalDate birth;
   private String registerNumber; // número de registro no conselho de saúde
   private String occupation; // "Fisioterapeuta", "Psicólogo", "Nutricionista", etc.
+  private ProfileType profileType;
 }

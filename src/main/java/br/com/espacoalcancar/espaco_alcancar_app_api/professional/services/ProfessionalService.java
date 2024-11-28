@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.exceptions.ProfessionalAlreadyExists;
+import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.dto.EditProfessionalDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.dto.NewProfessionalDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.entities.ProfessionalEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.repositories.ProfessionalRepository;
@@ -37,6 +38,33 @@ public class ProfessionalService {
 
     professionalRepository.save(convertDtoToEntity(newProfessional));
     return "Profissional cadastrado com sucesso";
+  }
+
+  // Editar dados de um profissional
+  public void updateProfessional(EditProfessionalDTO newProfessional) throws RuntimeException {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new RuntimeException("User is not authenticated");
+    }
+
+    var principal = (ProfessionalEntity) authentication.getPrincipal();
+
+    if (!(principal instanceof ProfessionalEntity)) {
+      throw new RuntimeException("User principal is not of expected type");
+    }
+
+    Integer id = principal.getId();
+    System.out.println("ID: " + id);
+
+    ProfessionalEntity entity = professionalRepository.findById(id).get();
+    entity.setName(newProfessional.getName());
+    entity.setPhone(newProfessional.getPhone());
+    entity.setBirth(newProfessional.getBirth());
+    entity.setOccupation(newProfessional.getOccupation());
+    entity.setRegisterNumber(newProfessional.getRegisterNumber());
+    professionalRepository.save(entity);
   }
 
   // Arquivar um profissional
@@ -68,18 +96,6 @@ public class ProfessionalService {
     return professionalRepository.findByActiveTrue();
   }
 
-  // Editar dados de um profissional
-  public void updateProfessional(Integer id, NewProfessionalDTO newProfessional) {
-    ProfessionalEntity entity = professionalRepository.findById(id).get();
-    entity.setName(newProfessional.getName());
-    entity.setEmail(newProfessional.getEmail());
-    entity.setPassword(newProfessional.getPassword());
-    entity.setRegisterNumber(newProfessional.getRegisterNumber());
-    entity.setOccupation(newProfessional.getOccupation());
-    entity.setBirth(newProfessional.getBirth());
-    professionalRepository.save(entity);
-  }
-
   // Obter profissional atualmente logado
   public ProfessionalEntity getCurrentProfessional() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -90,7 +106,7 @@ public class ProfessionalService {
     return principal;
   }
 
-  // Função acessória p/ converter DTO em entidade
+  // Função acessória p/ converter NewProfessionalDTO em entidade
   private ProfessionalEntity convertDtoToEntity(NewProfessionalDTO newProfessional) {
     ProfessionalEntity entity = new ProfessionalEntity();
     entity.setName(newProfessional.getName());
