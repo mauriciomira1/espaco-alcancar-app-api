@@ -36,11 +36,10 @@ public class SecurityConfig {
 
           auth
               .requestMatchers("/dashboard/**").authenticated()
-              .requestMatchers("/professional/**").permitAll()
-              .requestMatchers("/auth/**").permitAll()
+              .requestMatchers("/professional/**").authenticated()
               /* Requisições POST */
               .requestMatchers(HttpMethod.POST, "/user/new").permitAll()
-              .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+              .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
               .requestMatchers(HttpMethod.POST, "/dashboard/fillout/sensory-profile")
               .hasAnyRole("ADMIN", "PROFESSIONAL")
 
@@ -52,7 +51,8 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.GET, "/dashboard/fillout/list-all-sensory-profiles").hasAnyRole("ADMIN")
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
-              .requestMatchers(HttpMethod.GET, "/user/me").authenticated();
+              .requestMatchers(HttpMethod.GET, "/user/me").authenticated()
+              .requestMatchers(HttpMethod.GET, "/professional/me").authenticated();
           auth.anyRequest().authenticated();
         })
         .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
