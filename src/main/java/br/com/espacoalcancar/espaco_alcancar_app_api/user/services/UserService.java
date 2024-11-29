@@ -3,6 +3,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.naming.NameNotFoundException;
 
@@ -73,14 +74,14 @@ public class UserService {
   }
 
   // Procurar por um usuário a partir do ID
-  public UserDashboardResponse findById(Integer id) throws UsernameNotFoundException {
+  public UserDashboardResponse findById(UUID id) throws UsernameNotFoundException {
     var response = this.repository.findById(id)
         .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
     return convertToUserDashboardResponse(response);
   }
 
   // Criar novo usuário
-  public Integer create(UserRequest request) {
+  public UUID create(UserRequest request) {
     UserEntity entity = new UserEntity();
 
     request.setProfileType(new ProfileType(true, false, false));
@@ -96,7 +97,7 @@ public class UserService {
   }
 
   // Editar dados do usuário
-  public UserDashboardResponse updateUser(Integer userId, UserRequest request) {
+  public UserDashboardResponse updateUser(UUID userId, UserRequest request) {
     UserEntity userEntity = repository.findById(userId)
         .orElseThrow(() -> new UsernameNotFoundException("User not autenticated"));
 

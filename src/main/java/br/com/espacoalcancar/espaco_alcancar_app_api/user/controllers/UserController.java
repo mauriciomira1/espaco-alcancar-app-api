@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,11 +26,11 @@ public class UserController {
   @Autowired
   UserService userService;
 
-  Integer userId;
+  UUID userId;
 
   // Criar novo usuário paciente
   @PostMapping("/new")
-  public Integer create(@Valid @RequestBody UserRequest request) {
+  public UUID create(@Valid @RequestBody UserRequest request) {
     userId = userService.create(request);
     return userId;
   }

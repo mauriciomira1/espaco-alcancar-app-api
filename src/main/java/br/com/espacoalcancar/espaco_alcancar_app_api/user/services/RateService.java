@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -29,7 +30,7 @@ public class RateService {
 
     // Recuperando o ID do usuário configurado no SecurityFilter.java
     var userIdObject = httpServletRequest.getAttribute("user_id");
-    Integer userId = Integer.valueOf(userIdObject.toString());
+    UUID userId = UUID.fromString(userIdObject.toString());
 
     RateEntity rateEntity = new RateEntity();
 
@@ -43,7 +44,7 @@ public class RateService {
   }
 
   // Buscar todas as avaliações de um usuário baseado no seu ID
-  public Iterable<RateResponse> findByUserId(Integer userId) {
+  public Iterable<RateResponse> findByUserId(UUID userId) {
     List<RateEntity> rateEntities = this.rateRepository.findAllByUserId(userId);
     return rateEntities.stream().map(this::convertToRateResponse).collect(Collectors.toList());
   }

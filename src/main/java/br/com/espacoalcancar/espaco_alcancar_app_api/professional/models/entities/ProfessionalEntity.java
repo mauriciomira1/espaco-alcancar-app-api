@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.entiti
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import jakarta.persistence.Column;
@@ -23,9 +24,9 @@ import lombok.Setter;
 public class ProfessionalEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Setter(value = AccessLevel.NONE)
-  private Integer id;
+  private UUID id;
 
   @Column(length = 70, nullable = false, unique = true)
   private String name;

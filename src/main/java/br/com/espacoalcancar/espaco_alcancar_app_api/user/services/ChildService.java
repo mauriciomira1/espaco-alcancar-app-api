@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,10 +30,10 @@ public class ChildService {
   UserRepository userRepository;
 
   // Adicionar um filho
-  public Integer create(ChildRequest request, HttpServletRequest httpServletRequest) {
+  public UUID create(ChildRequest request, HttpServletRequest httpServletRequest) {
     // Recuperando o ID do usuário configurado no SecurityFilter.java
     var userIdObject = httpServletRequest.getAttribute("user_id");
-    Integer userId = Integer.valueOf(userIdObject.toString());
+    UUID userId = UUID.fromString(userIdObject.toString());
 
     UserEntity userEntity = userRepository.findById(userId)
         .orElseThrow(() -> new UsernameNotFoundException("Child not found with this id."));
@@ -58,7 +59,7 @@ public class ChildService {
   }
 
   // Buscar por uma criança
-  public ChildResponse findById(Integer id) {
+  public ChildResponse findById(UUID id) {
     ChildEntity childEntity = childRepository.findById(id).orElse(null);
     if (childEntity == null) {
       throw new IllegalArgumentException("Child not found with id: " + id);
@@ -68,7 +69,7 @@ public class ChildService {
 
   // Buscar por todas as crianças baseado no ID do usuário (requere
   // ROLE_PROFESSIONAL ou ROLE_ADMIN)
-  public List<ChildResponse> list(Integer userId) {
+  public List<ChildResponse> list(UUID userId) {
     Iterable<ChildEntity> entity = childRepository.findAllByUserId(userId);
     List<ChildResponse> response = new ArrayList<>();
     for (ChildEntity entityChild : entity) {
@@ -114,7 +115,7 @@ public class ChildService {
   }
 
   // Atualizar um filho
-  public Integer update(ChildUpdate request) {
+  public UUID update(ChildUpdate request) {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -133,7 +134,7 @@ public class ChildService {
   }
 
   // Remover um filho
-  public void remove(Integer childId) {
+  public void remove(UUID childId) {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

@@ -14,6 +14,7 @@ import javax.naming.AuthenticationException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AuthProfessionalService {
@@ -59,7 +60,7 @@ public class AuthProfessionalService {
 
   // Atualizar token usando refreshToken
   public String refreshToken(String refreshToken) throws AuthenticationException {
-    Integer professionalId = Integer.valueOf(jwt.validateToken(refreshToken));
+    UUID professionalId = UUID.fromString(jwt.validateToken(refreshToken));
     if (professionalId == null) {
       throw new AuthenticationException("Invalid refresh token.");
     }

@@ -12,6 +12,7 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.applications.services.Senso
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class SensoryProfileController {
 
   // Criar um novo perfil sensorial (perfil: profissional)
   @PostMapping("/sensory-profile")
-  public Integer create(@RequestBody SensoryProfileRequest request) {
+  public UUID create(@RequestBody SensoryProfileRequest request) {
     return sensoryProfileService.create(request);
   }
 
