@@ -27,7 +27,7 @@ public class ResultsOfSensoryProfileService {
     // Alterar a lista de respostas (Answers)
     sensoryProfile.setResultsOfSensoryProfile(results.getAnswers());
 
-    // Preenchimento de perfil NÃO INICIADO, INICIADO ou FINALIZADO
+    // Preenchimento de perfil (NÃO INICIADO, INICIADO ou FINALIZADO)
     if (sensoryProfile.getProfileType().toString() == "UNTIL_THREE_YEARS") {
       if (sensoryProfile.getResultsOfSensoryProfile().length() > 0
           && sensoryProfile.getResultsOfSensoryProfile().length() < 54) {

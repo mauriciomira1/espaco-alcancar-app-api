@@ -3,6 +3,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.security;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,9 +47,9 @@ public class SecurityFilter extends OncePerRequestFilter {
         response.getWriter().write("Token is empty or invalid");
         return;
       }
-      Integer userId;
+      UUID userId;
       try {
-        userId = Integer.parseInt(subjectToken);
+        userId = UUID.fromString(subjectToken);
       } catch (NumberFormatException e) {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         return;

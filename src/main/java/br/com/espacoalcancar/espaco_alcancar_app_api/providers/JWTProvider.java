@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.providers;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class JWTProvider {
   @Value("${security.token.secret}")
   private String secretKey;
 
-  public String generateToken(Integer userId, Instant expiration) {
+  public String generateToken(UUID userId, Instant expiration) {
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var token = JWT
         .create()

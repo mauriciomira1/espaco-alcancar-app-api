@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -31,7 +32,7 @@ public class RateEntity {
   @Length(max = 300)
   private String comment;
 
-  private Integer userId;
+  private UUID userId;
 
   private LocalDateTime createdAt;
 }

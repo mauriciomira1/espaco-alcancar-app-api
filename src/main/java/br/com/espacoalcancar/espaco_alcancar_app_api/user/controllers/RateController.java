@@ -1,5 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +37,7 @@ public class RateController {
   // Listar todas as avaliações de um usuário baseado no seu ID
   @GetMapping("/list-all")
   public Iterable<RateResponse> listAllRatesOfUserById() {
-    Integer userId = userService.getCurrentUser().getId();
+    UUID userId = userService.getCurrentUser().getId();
 
     return this.rateService.findByUserId(userId);
   }

@@ -1,5 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.professional.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,7 @@ public class ProfessionalController {
 
   // Arquivar um profissional
   @PutMapping("/archive")
-  public ResponseEntity<String> archive(Integer id) {
+  public ResponseEntity<String> archive(UUID id) {
     try {
       professionalService.archiveProfessional(id);
       return ResponseEntity.ok().body("Profissional arquivado com sucesso");
@@ -49,7 +51,7 @@ public class ProfessionalController {
 
   // Desarquivar um profissional
   @PutMapping("/unarchive")
-  public ResponseEntity<String> unarchive(Integer id) {
+  public ResponseEntity<String> unarchive(UUID id) {
     try {
       professionalService.unarchiveProfessional(id);
       return ResponseEntity.ok().body("Profissional desarquivado com sucesso");
@@ -60,7 +62,7 @@ public class ProfessionalController {
 
   // Buscar um profissional
   @GetMapping("/get")
-  public ResponseEntity<ProfessionalEntity> get(Integer id) {
+  public ResponseEntity<ProfessionalEntity> get(UUID id) {
     try {
       return ResponseEntity.ok().body(professionalService.getProfessional(id));
     } catch (Exception e) {

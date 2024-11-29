@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -31,9 +32,9 @@ import lombok.Setter;
 public class UserEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Setter(value = AccessLevel.NONE)
-  private Integer id;
+  private UUID id;
 
   @Column(length = 70, nullable = false, unique = true)
   private String name;

@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.entities.ProfessionalEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
@@ -26,9 +27,9 @@ import lombok.Setter;
 public class SensoryProfileEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Setter(value = AccessLevel.NONE)
-  private Integer id;
+  private UUID id;
 
   @Enumerated(EnumType.STRING)
   private Status status;

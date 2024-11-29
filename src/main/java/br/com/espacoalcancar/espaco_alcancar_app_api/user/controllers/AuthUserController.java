@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.UUID;
 
 import javax.naming.AuthenticationException;
 
@@ -68,14 +69,14 @@ public class AuthUserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token not found.");
       }
 
-      String userId = this.jwt.validateToken(refreshToken);
+      UUID userId = UUID.fromString(this.jwt.validateToken(refreshToken));
       if (userId == null) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token.");
       }
 
       // Gerando novos tokens
-      String newToken = this.jwt.generateToken(Integer.parseInt(userId), Instant.now().plus(Duration.ofHours(2)));
-      String newRefreshToken = this.jwt.generateToken(Integer.parseInt(userId),
+      String newToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofHours(2)));
+      String newRefreshToken = this.jwt.generateToken(userId,
           Instant.now().plus(Duration.ofDays(30)));
 
       // Atualizando o refresh token no cookie

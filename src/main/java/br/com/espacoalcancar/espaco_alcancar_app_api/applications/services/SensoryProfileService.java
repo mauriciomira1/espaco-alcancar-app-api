@@ -3,6 +3,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.applications.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +34,7 @@ public class SensoryProfileService {
   private ProfessionalService professionalService;
 
   // Criar novo perfil sensorial
-  public Integer create(SensoryProfileRequest request) {
+  public UUID create(SensoryProfileRequest request) {
 
     ChildEntity child = childRepository.findById(request.getChildId())
         .orElseThrow(() -> new UsernameNotFoundException("Dependente não encontrado."));

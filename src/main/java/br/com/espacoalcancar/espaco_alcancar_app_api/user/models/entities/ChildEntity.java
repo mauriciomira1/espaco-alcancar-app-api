@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,9 +35,9 @@ import lombok.Setter;
 public class ChildEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Setter(value = AccessLevel.NONE)
-  private Integer id;
+  private UUID id;
 
   @Column(length = 30)
   private String name;
@@ -57,7 +58,7 @@ public class ChildEntity {
   private Gender gender;
 
   @Column(name = "user_id", insertable = false, updatable = false)
-  private Integer userId;
+  private UUID userId;
 
   @Column(nullable = false, updatable = false, name = "created_at")
   private LocalDateTime createdAt = LocalDateTime.now();

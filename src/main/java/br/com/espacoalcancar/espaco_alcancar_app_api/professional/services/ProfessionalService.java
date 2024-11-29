@@ -3,6 +3,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.professional.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -55,7 +56,7 @@ public class ProfessionalService {
       throw new RuntimeException("User principal is not of expected type");
     }
 
-    Integer id = principal.getId();
+    UUID id = principal.getId();
     System.out.println("ID: " + id);
 
     ProfessionalEntity entity = professionalRepository.findById(id).get();
@@ -68,21 +69,21 @@ public class ProfessionalService {
   }
 
   // Arquivar um profissional
-  public void archiveProfessional(Integer id) {
+  public void archiveProfessional(UUID id) {
     ProfessionalEntity entity = professionalRepository.findById(id).get();
     entity.setActive(false);
     professionalRepository.save(entity);
   }
 
   // Desarquivar um profissional
-  public void unarchiveProfessional(Integer id) {
+  public void unarchiveProfessional(UUID id) {
     ProfessionalEntity entity = professionalRepository.findById(id).get();
     entity.setActive(true);
     professionalRepository.save(entity);
   }
 
   // Buscar um profissional
-  public ProfessionalEntity getProfessional(Integer id) {
+  public ProfessionalEntity getProfessional(UUID id) {
     return professionalRepository.findById(id).get();
   }
 

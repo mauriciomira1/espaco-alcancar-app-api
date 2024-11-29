@@ -1,13 +1,14 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.dto;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import lombok.Data;
 
 @Data
 public class ProfessionalDashboardResponse {
-  private Integer id;
+  private UUID id;
   private String name;
   private String phone;
   private String email;

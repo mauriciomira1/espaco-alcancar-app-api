@@ -10,8 +10,8 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.ChildService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -32,7 +32,7 @@ public class ChildController {
 
   // Criar um novo filho/dependente
   @PostMapping("/new")
-  public Integer create(@Valid @RequestBody ChildRequest childRequest, HttpServletRequest request) {
+  public UUID create(@Valid @RequestBody ChildRequest childRequest, HttpServletRequest request) {
     return this.childService.create(childRequest, request);
   }
 
@@ -52,12 +52,10 @@ public class ChildController {
       throw new RuntimeException("User principal is not of expected type");
     }
 
-    var userId = principal.getId();
+    UUID userId = principal.getId();
 
-    List<ChildResponse> childResponses = new ArrayList<>();
-    this.childService.list(userId).forEach(childResponses::add);
+    List<ChildResponse> childResponses = this.childService.list(userId);
     return childResponses;
-
   }
 
   // Listar todos os dependentes cadastrados
@@ -68,13 +66,13 @@ public class ChildController {
 
   // Atualizar um dependente
   @PutMapping("/edit")
-  public Integer update(@Valid @RequestBody ChildUpdate childUpdate) {
+  public UUID update(@Valid @RequestBody ChildUpdate childUpdate) {
     return this.childService.update(childUpdate);
   }
 
   // Remover um dependente
   @DeleteMapping("/remove")
-  public void remove(@Valid @RequestBody Integer childId) {
+  public void remove(@Valid @RequestBody UUID childId) {
     this.childService.remove(childId);
   }
 }
