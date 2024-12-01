@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +35,14 @@ public class SensoryProfileController {
 
   // Criar um novo perfil sensorial (perfil: profissional)
   @PostMapping("/sensory-profile")
-  public UUID create(@RequestBody SensoryProfileRequest request) {
-    return sensoryProfileService.create(request);
+  public ResponseEntity<String> create(@RequestBody SensoryProfileRequest request) {
+    try {
+      sensoryProfileService.create(request);
+      return ResponseEntity.status(HttpStatus.CREATED).body("Perfil sensorial criado e disponibilizado com sucesso.");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+          .body("Erro ao cadastrar perfil sensorial. Tente mais tarde ou entre em contato com o suporte.");
+    }
   }
 
   // Preencher um perfil sensorial (perfil: paciente)
@@ -59,7 +66,6 @@ public class SensoryProfileController {
     } catch (Exception e) {
       return ResponseEntity.badRequest().build();
     }
-
   }
 
   // Listar todos os perfis sensoriais cadastrados (perfil: admin)
@@ -79,5 +85,4 @@ public class SensoryProfileController {
       return ResponseEntity.badRequest().body("Erro ao preencher perfil sensorial.");
     }
   }
-
 }

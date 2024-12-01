@@ -40,7 +40,7 @@ public class SecurityConfig {
               .requestMatchers("/professional/**").authenticated()
               /* Requisições POST */
               .requestMatchers(HttpMethod.POST, "/user/new").permitAll()
-              .requestMatchers(HttpMethod.POST, "/auth/professional").permitAll()
+              .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
               .requestMatchers(HttpMethod.POST, "/dashboard/fillout/sensory-profile")
               .hasAnyRole("ADMIN", "PROFESSIONAL")
 
