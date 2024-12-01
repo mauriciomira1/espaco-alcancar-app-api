@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.Status;
@@ -52,7 +53,7 @@ public class SensoryProfileService {
     return sensoryProfile.getId();
   }
 
-  // Listar todos os perfis sensoriais
+  // Listar todos os perfis sensoriais (perfil: admin)
   public List<SensoryProfileEntity> listAll() {
     return sensoryProfileRepository.findAll();
   }
@@ -79,25 +80,10 @@ public class SensoryProfileService {
     return response;
   }
 
-  // Preencher um perfil sensorial
-  public void fillOut(ResultsRequestDTO results) {
-    SensoryProfileEntity sensoryProfile = sensoryProfileRepository.findById(results.getSensoryProfileId())
-        .orElseThrow(() -> new UsernameNotFoundException("Perfil sensorial não encontrado."));
-
-    // Verificando se o perfil sensorial foi preenchido completamente
-    var numberOfAnswersFilled = results.getAnswers().length();
-    if (numberOfAnswersFilled == 0) {
-      sensoryProfile.setStatus(Status.UNFILLED);
-    } else if (numberOfAnswersFilled == getExpectedQuestions(sensoryProfile.getProfileType())) {
-      sensoryProfile.setStatus(Status.FINISHED);
-    } else if (numberOfAnswersFilled > 0
-        && numberOfAnswersFilled < getExpectedQuestions(sensoryProfile.getProfileType())) {
-      sensoryProfile.setStatus(Status.STARTED);
-    }
-
-    sensoryProfile.setResultsOfSensoryProfile(results.getAnswers());
-    sensoryProfile.setUpdatedAt(LocalDateTime.now());
-    sensoryProfileRepository.save(sensoryProfile);
+  // Listar todos os perfis sensoriais de uma criança (perfil: paciente)
+  public List<SensoryProfileEntity> listAllByChild(UUID childId) {
+    List<SensoryProfileEntity> response = sensoryProfileRepository.findAllByChildId(childId);
+    return response;
   }
 
   // Resultados de um perfil sensorial
@@ -261,8 +247,10 @@ public class SensoryProfileService {
   }
 
   // Obter perguntas de um perfil sensorial
-  public List<String> getQuestions(SensoryProfileType sensoryProfileType) {
+  public List<String> getQuestions(SensoryProfileTypeRequestDTO sensoryProfileTypeRequest) {
     List<String> questionsList = new ArrayList<>();
+    SensoryProfileType sensoryProfileType = sensoryProfileTypeRequest.getSensoryProfileType();
+
     if (sensoryProfileType == SensoryProfileType.UNTIL_THREE_YEARS) {
       questionsList.add("1. Precisa de uma rotina para permanecer satisfeito(a) ou calmo(a).");
       questionsList.add("2. Age de uma forma que interfere nas programações e planos da família.");
@@ -441,16 +429,17 @@ public class SensoryProfileService {
     }
   }
 
-  // Função auxiliar para obter o número esperado de perguntas com base no tipo de
-  // perfil sensorial
-  private int getExpectedQuestions(SensoryProfileType profileType) {
-    switch (profileType) {
-      case UNTIL_THREE_YEARS:
-        return 54;
-      case MORE_THAN_THREE_YEARS:
-        return 86;
-      default:
-        throw new IllegalArgumentException("Tipo de perfil sensorial incorreto.");
-    }
-  }
+  // Função auxiliar para obter o número de perguntas com base no tipo de PS
+  /*
+   * private int getExpectedQuestions(SensoryProfileType profileType) {
+   * switch (profileType) {
+   * case UNTIL_THREE_YEARS:
+   * return 54;
+   * case MORE_THAN_THREE_YEARS:
+   * return 86;
+   * default:
+   * throw new IllegalArgumentException("Tipo de perfil sensorial incorreto.");
+   * }
+   * }
+   */
 }

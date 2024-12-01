@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.services.ResultsOfSensoryProfileService;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.services.SensoryProfileService;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/dashboard/fillout")
+@RequestMapping("/dashboard/sp")
 public class SensoryProfileController {
 
   @Autowired
@@ -34,7 +35,7 @@ public class SensoryProfileController {
   ResultsOfSensoryProfileService resultsOfSensoryProfileService;
 
   // Criar um novo perfil sensorial (perfil: profissional)
-  @PostMapping("/sensory-profile")
+  @PostMapping("/new")
   public ResponseEntity<String> create(@RequestBody SensoryProfileRequest request) {
     try {
       sensoryProfileService.create(request);
@@ -45,19 +46,14 @@ public class SensoryProfileController {
     }
   }
 
-  // Preencher um perfil sensorial (perfil: paciente)
-  @PutMapping("/sensory-profile")
-  public void fillOut(@Valid @RequestBody ResultsRequestDTO results) {
-    resultsOfSensoryProfileService.create(results);
-  }
-
   // Listar todos os perfis sensoriais de um profissional (perfil: profissional)
-  @GetMapping("/list-all-sensory-profiles-of-a-professional/{professionalId}")
+  @GetMapping("/list-all-of-a-professional/{professionalId}")
   public List<SensoryProfileResponse> listAllSensoryProfilesOfAProfessional(@PathVariable Integer professionalId) {
     return sensoryProfileService.listAllByProfessional();
   }
 
-  // Listar todos os perfis sensoriais de um profissional logado
+  // Listar todos os perfis sensoriais de um profissional logado (perfil:
+  // profissional)
   @GetMapping("/list-all-sensory-profiles-created")
   public ResponseEntity<List<SensoryProfileResponse>> listAllSensoryProfilesCreated() {
     try {
@@ -69,14 +65,25 @@ public class SensoryProfileController {
   }
 
   // Listar todos os perfis sensoriais cadastrados (perfil: admin)
-  @GetMapping("/list-all-sensory-profiles")
+  @GetMapping("/list-all")
   public ResponseEntity<List<SensoryProfileEntity>> listAllSensoryProfiles() {
     List<SensoryProfileEntity> response = sensoryProfileService.listAll();
     return ResponseEntity.ok().body(response);
   }
 
+  // Listar perfis sensoriais de um dependente (perfil: paciente)
+  @GetMapping("/list-all-of-a-child/{childId}")
+  public ResponseEntity<?> listAllSensoryProfilesOfAChild(@PathVariable UUID childId) {
+    try {
+      List<SensoryProfileEntity> response = sensoryProfileService.listAllByChild(childId);
+      return ResponseEntity.ok().body(response);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
   // Preencher um perfil sensorial (perfil: paciente)
-  @PutMapping("/fill-out-sensory-profile")
+  @PutMapping("/fillout")
   public ResponseEntity<String> fillOutSensoryProfile(@Valid @RequestBody ResultsRequestDTO results) {
     try {
       resultsOfSensoryProfileService.create(results);
@@ -84,5 +91,12 @@ public class SensoryProfileController {
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("Erro ao preencher perfil sensorial.");
     }
+  }
+
+  // Obter as perguntas do perfil sensorial
+  @GetMapping("/get-questions")
+  public ResponseEntity<List<String>> getQuestions(@RequestBody SensoryProfileTypeRequestDTO sensoryProfileType) {
+    List<String> questions = sensoryProfileService.getQuestions(sensoryProfileType);
+    return ResponseEntity.ok().body(questions);
   }
 }
