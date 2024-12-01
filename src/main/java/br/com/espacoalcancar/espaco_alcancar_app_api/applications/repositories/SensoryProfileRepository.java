@@ -11,4 +11,6 @@ public interface SensoryProfileRepository extends JpaRepository<SensoryProfileEn
 
   public List<SensoryProfileEntity> findAllByProfessionalId(UUID professionalId);
 
+  public List<SensoryProfileEntity> findAllByChildId(UUID childId);
+
 }

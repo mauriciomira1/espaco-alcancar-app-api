@@ -41,15 +41,17 @@ public class SecurityConfig {
               /* Requisições POST */
               .requestMatchers(HttpMethod.POST, "/user/new").permitAll()
               .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-              .requestMatchers(HttpMethod.POST, "/dashboard/fillout/sensory-profile")
+              .requestMatchers(HttpMethod.POST, "/dashboard/sp/new")
               .hasAnyRole("ADMIN", "PROFESSIONAL")
 
               /* Requisições PUT */
-              .requestMatchers(HttpMethod.PUT, "/dashboard/fillout/fill-out-sensory-profile").hasAnyRole("PATIENT")
+              .requestMatchers(HttpMethod.PUT, "/dashboard/sp/fillout").hasAnyRole("PATIENT")
               /* Requisições GET */
-              .requestMatchers(HttpMethod.GET, "/dashboard/fillout/list-all-sensory-profiles-of-a-professional/**")
+              .requestMatchers(HttpMethod.GET, "/dashboard/sp/list-all-of-a-professional/**")
               .hasAnyRole("ADMIN", "PROFESSIONAL")
-              .requestMatchers(HttpMethod.GET, "/dashboard/fillout/list-all-sensory-profiles").hasAnyRole("ADMIN")
+              .requestMatchers(HttpMethod.GET, "/dashboard/sp/list-all").hasAnyRole("ADMIN")
+              .requestMatchers(HttpMethod.GET, "/dashboard/sp/list-all-of-a-child/**").authenticated()
+              .requestMatchers(HttpMethod.GET, "/dashboard/sp/list-all-of-a-child").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated()
