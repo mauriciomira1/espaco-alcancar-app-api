@@ -28,7 +28,6 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.professional.models.entitie
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.services.ProfessionalService;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.ChildRepository;
 
 @Service

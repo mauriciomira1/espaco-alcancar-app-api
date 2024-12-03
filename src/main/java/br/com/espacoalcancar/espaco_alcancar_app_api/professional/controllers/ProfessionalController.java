@@ -1,5 +1,6 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.professional.controllers;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,34 +30,34 @@ public class ProfessionalController {
 
   // Criar um profissional
   @PostMapping("/new")
-  public ResponseEntity<String> create(@RequestBody NewProfessionalDTO request) {
+  public ResponseEntity<Object> create(@RequestBody NewProfessionalDTO request) {
     try {
       professionalService.addProfessional(request);
-      return ResponseEntity.status(HttpStatus.CREATED).body("Profissional cadastrado com sucesso");
+      return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Profissional cadastrado com sucesso"));
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Email já cadastrado");
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Email já cadastrado"));
     }
   }
 
   // Arquivar um profissional
   @PutMapping("/archive")
-  public ResponseEntity<String> archive(UUID id) {
+  public ResponseEntity<Object> archive(UUID id) {
     try {
       professionalService.archiveProfessional(id);
-      return ResponseEntity.ok().body("Profissional arquivado com sucesso");
+      return ResponseEntity.ok().body(Map.of("message", "Profissional arquivado com sucesso"));
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao arquivar profissional");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Erro ao arquivar profissional"));
     }
   }
 
   // Desarquivar um profissional
   @PutMapping("/unarchive")
-  public ResponseEntity<String> unarchive(UUID id) {
+  public ResponseEntity<Object> unarchive(UUID id) {
     try {
       professionalService.unarchiveProfessional(id);
-      return ResponseEntity.ok().body("Profissional desarquivado com sucesso");
+      return ResponseEntity.ok().body(Map.of("message", "Profissional desarquivado com sucesso"));
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao desarquivar profissional");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Erro ao desarquivar profissional"));
     }
   }
 
@@ -96,12 +97,13 @@ public class ProfessionalController {
 
   // Atualizar um profissional
   @PutMapping("/edit")
-  public ResponseEntity<String> update(@Valid @RequestBody EditProfessionalDTO request) {
+  public ResponseEntity<Object> update(@Valid @RequestBody EditProfessionalDTO request) {
     try {
       professionalService.updateProfessional(request);
-      return ResponseEntity.ok().body("Profissional atualizado com sucesso");
+      return ResponseEntity.ok().body(Map.of("message", "Profissional atualizado com sucesso"));
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar profissional: " + e);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+          .body(Map.of("error", "Erro ao atualizar profissional: " + e));
     }
   }
 }

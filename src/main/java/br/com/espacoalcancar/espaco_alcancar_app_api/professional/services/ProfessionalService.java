@@ -57,7 +57,6 @@ public class ProfessionalService {
     }
 
     UUID id = principal.getId();
-    System.out.println("ID: " + id);
 
     ProfessionalEntity entity = professionalRepository.findById(id).get();
     entity.setName(newProfessional.getName());
