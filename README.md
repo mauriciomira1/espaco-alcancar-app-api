@@ -29,6 +29,10 @@ A aplicação Espaço Alcançar tem como objetivo principal o cadastro de usuár
 
 Além disso, o sistema permite que os usuários deixem avaliações, sugestões e notas (de 1 a 5) para a clínica, ajudando a medir a satisfação dos clientes.
 
+O front-end, em React, está disponível em: https://github.com/mauriciomira1/espaco-alcancar-v3
+
+O sistema será implantado no site já existente http://espacoalcancar.com.br.
+
 No futuro, novas funcionalidades serão implementadas conforme a necessidade da clínica.
 
 ## Principais Funcionalidades
