@@ -3,6 +3,8 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.applications.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileMoreThanThreeYearsDTO;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileUntilThreeYearsDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
@@ -99,4 +101,29 @@ public class SensoryProfileController {
     List<String> questions = sensoryProfileService.getQuestions(sensoryProfileType);
     return ResponseEntity.ok().body(questions);
   }
+
+  // Obter as respostas do perfil sensorial para menores de três anos
+  @GetMapping("/until-three-years")
+  public ResponseEntity<?> getAnswersForChildrenUnderThreeYears(ResultsRequestDTO request) {
+    try {
+      ResultsOfSensoryProfileUntilThreeYearsDTO answers = sensoryProfileService
+          .calculateSensoryProfileUntilThreeYears(request);
+      return ResponseEntity.ok().body(answers);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  // Obter as respostas do perfil sensorial para maiores de três anos
+  @GetMapping("/more-than-three-years")
+  public ResponseEntity<?> getAnswersForChildrenMoreThreeYears(ResultsRequestDTO request) {
+    try {
+      ResultsOfSensoryProfileMoreThanThreeYearsDTO answers = sensoryProfileService
+          .calculateSensoryProfileMoreThanThreeYears(request);
+      return ResponseEntity.ok().body(answers);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
 }
