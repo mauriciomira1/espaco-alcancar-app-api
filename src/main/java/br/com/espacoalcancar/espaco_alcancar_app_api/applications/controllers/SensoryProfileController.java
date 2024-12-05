@@ -97,14 +97,16 @@ public class SensoryProfileController {
 
   // Obter as perguntas do perfil sensorial
   @GetMapping("/get-questions")
-  public ResponseEntity<List<String>> getQuestions(@RequestBody SensoryProfileTypeRequestDTO sensoryProfileType) {
+  public ResponseEntity<List<String>> getQuestions(
+      @Valid @RequestBody SensoryProfileTypeRequestDTO sensoryProfileType) {
     List<String> questions = sensoryProfileService.getQuestions(sensoryProfileType);
     return ResponseEntity.ok().body(questions);
   }
 
-  // Obter as respostas do perfil sensorial para menores de três anos
+  // Obter as respostas do perfil sensorial para menores de três anos (mudar o
+  // requestBody para o ID da resposta, aí eu puxo os resultados por aqui)
   @GetMapping("/until-three-years")
-  public ResponseEntity<?> getAnswersForChildrenUnderThreeYears(ResultsRequestDTO request) {
+  public ResponseEntity<?> getAnswersForChildrenUnderThreeYears(@Valid @RequestBody ResultsRequestDTO request) {
     try {
       ResultsOfSensoryProfileUntilThreeYearsDTO answers = sensoryProfileService
           .calculateSensoryProfileUntilThreeYears(request);
@@ -114,9 +116,10 @@ public class SensoryProfileController {
     }
   }
 
-  // Obter as respostas do perfil sensorial para maiores de três anos
+  // Obter as respostas do perfil sensorial para maiores de três anos(mudar o
+  // requestBody para o ID da resposta, aí eu puxo os resultados por aqui)
   @GetMapping("/more-than-three-years")
-  public ResponseEntity<?> getAnswersForChildrenMoreThreeYears(ResultsRequestDTO request) {
+  public ResponseEntity<?> getAnswersForChildrenMoreThreeYears(@Valid @RequestBody ResultsRequestDTO request) {
     try {
       ResultsOfSensoryProfileMoreThanThreeYearsDTO answers = sensoryProfileService
           .calculateSensoryProfileMoreThanThreeYears(request);
