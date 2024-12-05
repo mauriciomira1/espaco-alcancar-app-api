@@ -1,14 +1,15 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.applications.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileMoreThanThreeYearsDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileUntilThreeYearsDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsRequestDTO;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequestDTO;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequest;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.CreateSensoryProfileTypeDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.services.ResultsOfSensoryProfileService;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.services.SensoryProfileService;
@@ -38,9 +39,9 @@ public class SensoryProfileController {
 
   // Criar um novo perfil sensorial (perfil: profissional)
   @PostMapping("/new")
-  public ResponseEntity<String> create(@RequestBody SensoryProfileRequest request) {
+  public ResponseEntity<String> create(@RequestBody CreateSensoryProfileTypeDTO childId) {
     try {
-      sensoryProfileService.create(request);
+      sensoryProfileService.create(UUID.fromString(childId.getChildId()));
       return ResponseEntity.status(HttpStatus.CREATED).body("Perfil sensorial criado e disponibilizado com sucesso.");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -98,7 +99,7 @@ public class SensoryProfileController {
   // Obter as perguntas do perfil sensorial
   @GetMapping("/get-questions")
   public ResponseEntity<List<String>> getQuestions(
-      @Valid @RequestBody SensoryProfileTypeRequestDTO sensoryProfileType) {
+      @Valid @RequestBody SensoryProfileTypeRequest sensoryProfileType) {
     List<String> questions = sensoryProfileService.getQuestions(sensoryProfileType);
     return ResponseEntity.ok().body(questions);
   }
@@ -106,10 +107,10 @@ public class SensoryProfileController {
   // Obter as respostas do perfil sensorial para menores de três anos (mudar o
   // requestBody para o ID da resposta, aí eu puxo os resultados por aqui)
   @GetMapping("/until-three-years")
-  public ResponseEntity<?> getAnswersForChildrenUnderThreeYears(@Valid @RequestBody ResultsRequestDTO request) {
+  public ResponseEntity<?> getAnswersForChildrenUnderThreeYears(@RequestParam String id) {
     try {
       ResultsOfSensoryProfileUntilThreeYearsDTO answers = sensoryProfileService
-          .calculateSensoryProfileUntilThreeYears(request);
+          .calculateSensoryProfileUntilThreeYears(id);
       return ResponseEntity.ok().body(answers);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -119,10 +120,10 @@ public class SensoryProfileController {
   // Obter as respostas do perfil sensorial para maiores de três anos(mudar o
   // requestBody para o ID da resposta, aí eu puxo os resultados por aqui)
   @GetMapping("/more-than-three-years")
-  public ResponseEntity<?> getAnswersForChildrenMoreThreeYears(@Valid @RequestBody ResultsRequestDTO request) {
+  public ResponseEntity<?> getAnswersForChildrenMoreThreeYears(@RequestParam String id) {
     try {
       ResultsOfSensoryProfileMoreThanThreeYearsDTO answers = sensoryProfileService
-          .calculateSensoryProfileMoreThanThreeYears(request);
+          .calculateSensoryProfileMoreThanThreeYears(id);
       return ResponseEntity.ok().body(answers);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());

@@ -28,18 +28,19 @@ public class ResultsOfSensoryProfileService {
     sensoryProfile.setResultsOfSensoryProfile(results.getAnswers());
 
     // Preenchimento de perfil (NÃO INICIADO, INICIADO ou FINALIZADO)
-    if (sensoryProfile.getProfileType().toString() == "UNTIL_THREE_YEARS") {
-      if (sensoryProfile.getResultsOfSensoryProfile().length() > 0
-          && sensoryProfile.getResultsOfSensoryProfile().length() < 54) {
+    String profileType = sensoryProfile.getProfileType().toString();
+    int answersLength = sensoryProfile.getResultsOfSensoryProfile().length();
+
+    if (profileType.equals("UNTIL_THREE_YEARS")) {
+      if (answersLength > 0 && answersLength < 54) {
         sensoryProfile.setStatus(Status.STARTED);
-      } else if (sensoryProfile.getResultsOfSensoryProfile().length() == 54) {
+      } else if (answersLength == 54) {
         sensoryProfile.setStatus(Status.FINISHED);
       }
-    } else if (sensoryProfile.getProfileType().toString() == "MORE_THAN_THREE_YEARS") {
-      if (sensoryProfile.getResultsOfSensoryProfile().length() > 0
-          && sensoryProfile.getResultsOfSensoryProfile().length() < 86) {
+    } else if (profileType.equals("MORE_THAN_THREE_YEARS")) {
+      if (answersLength > 0 && answersLength < 86) {
         sensoryProfile.setStatus(Status.STARTED);
-      } else if (sensoryProfile.getResultsOfSensoryProfile().length() == 86) {
+      } else if (answersLength == 86) {
         sensoryProfile.setStatus(Status.FINISHED);
       }
     }

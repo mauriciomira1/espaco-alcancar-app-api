@@ -52,6 +52,8 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.GET, "/dashboard/sp/list-all").hasAnyRole("ADMIN")
               .requestMatchers(HttpMethod.GET, "/dashboard/sp/list-all-of-a-child/**").authenticated()
               .requestMatchers(HttpMethod.GET, "/dashboard/sp/list-all-of-a-child").authenticated()
+              .requestMatchers(HttpMethod.GET, "/dashboard/sp/until-three-years").authenticated()
+              .requestMatchers(HttpMethod.GET, "/dashboard/sp/more-than-three-years").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated()
