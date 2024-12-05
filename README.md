@@ -10,9 +10,13 @@
 - [Resumo](#resumo)
 - [Principais Funcionalidades](#principais-funcionalidades)
 - [Principais Dependências](#principais-dependências)
+- [Requisitos](#requisitos)
 - [Como Inicializar o Projeto](#como-inicializar-o-projeto)
 - [Estrutura do Projeto](#estrutura-do-projeto)
+- [Testes](#testes)
+- [Deploy](#deploy)
 - [Licença](#licença)
+- [Contribuição](#contribuição)
 - [Contato](#contato)
 
 ## Resumo
@@ -44,6 +48,12 @@ No futuro, novas funcionalidades serão implementadas conforme a necessidade da 
 - Docker Compose para criação de containers e facilitação da configuração do projeto em outros sistemas
 - SonarQube para avaliação de qualidade de código, falhas de segurança, erros, etc. (ainda será implantado)
 - JUnit e Mockito para testes (ainda será implantado)
+
+## Requisitos
+
+- Java 17
+- Docker e Docker Compose
+- Maven
 
 ## Como Inicializar o Projeto
 
