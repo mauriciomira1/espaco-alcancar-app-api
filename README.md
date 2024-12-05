@@ -2,26 +2,48 @@
 
 ## Resumo
 
-- A aplicação tem o objetivo de cadastro de usuário, assim como cadastro dos filhos para posterior preenchimento online do "Perfil Sensorial" da criança. O Perfil preenchido será disponibilizado para o profissional analisar. Existem 3 modelos de perfil sensorial, que serão disponibilizados pelo profissional para o pai, via sistema.
+A aplicação Espaço Alcançar tem como objetivo principal o cadastro de usuários e seus filhos para posterior preenchimento online do "Perfil Sensorial" da criança. O perfil preenchido ser disponibilizado para análise de um profissional. Existem três modelos de perfil sensorial que podem ser disponibilizados pelo profissional para os pais, via sistema:
 
-1. Perfil Sensorial par menores de 3 anos
+1. Perfil Sensorial para menores de 3 anos
 2. Perfil Sensorial para maiores de 3 anos
 3. Perfil Escolar para maiores de 3 anos
 
-- Além disso, no sistema, o Usuário poderá deixar uma avaliação/sugestão e nota (de 1 a 5) para a clínica, para que possammos medir a satisfação dos clientes.
+Além disso, o sistema permite que os usuários deixem avaliações, sugestões e notas (de 1 a 5) para a clínica, ajudando a medir a satisfação dos clientes.
 
-- No futuro novas funções serão implementadas conforme necessidade da clínica.
+No futuro, novas funcionalidades serão implementadas conforme a necessidade da clínica.
 
-## Principais dependências
+## Principais Funcionalidades
 
-- SpringBoot
+- Cadastro de usuários e filhos
+- Preenchimento de perfis sensoriais
+- Análise de perfis sensoriais por profissionais
+- Avaliação e sugestão de usuários para a clínica
+- Autenticação e autorização de usuários e profissionais
+- Atualização de tokens de autenticação
+
+## Principais Dependências
+
+- Spring Boot
 - JWT para geração de token de autenticação
-- Jpa e Hibernate para DB
-- Docker compose para criar container e facilitar criação do projeto em outros sistemas
-- Sonarqube para avaliação de qualidade de código, falhas de segurança, erros, etc.
+- JPA e Hibernate para persistência de dados
+- Docker Compose para criação de containers e facilitação da configuração do projeto em outros sistemas
+- SonarQube para avaliação de qualidade de código, falhas de segurança, erros, etc. (ainda será implantado)
+- JUnit e Mockito para testes (ainda será implantado)
 
-## Como inicializar o projeto
+## Como Inicializar o Projeto
 
-1 - Preencha as informações de usuário e senha no application.properties
-1 - Com o docker instalado, use o comando "docker-compose up -d" no terminal da IDE para criar o container
-2 - Confirme se foi criado o container com o comando "docker ps"
+1. Preencha as informações de usuário e senha no arquivo `application.properties` localizado em `src/main/resources/`.
+2. Com o Docker instalado, use o comando `docker-compose up -d` no terminal da IDE para criar o container.
+3. Confirme se o container foi criado com sucesso usando o comando `docker ps`.
+
+## Estrutura do Projeto
+
+A estrutura do projeto é organizada da seguinte forma:
+
+## Licença
+
+Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## Contato
+
+Para mais informações, entre em contato com o desenvolvedor Maurício Miranda (https://www.linkedin.com/in/mmirandag)
