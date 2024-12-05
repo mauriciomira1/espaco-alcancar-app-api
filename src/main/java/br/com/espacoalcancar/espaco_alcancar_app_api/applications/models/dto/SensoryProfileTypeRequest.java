@@ -4,6 +4,7 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entitie
 import lombok.Data;
 
 @Data
-public class SensoryProfileTypeRequestDTO {
+public class SensoryProfileTypeRequest {
   private SensoryProfileType sensoryProfileType;
+
 }

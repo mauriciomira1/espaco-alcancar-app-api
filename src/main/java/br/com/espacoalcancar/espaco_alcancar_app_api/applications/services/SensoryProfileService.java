@@ -3,6 +3,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.applications.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileMoreThanThreeYearsDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileUntilThreeYearsDTO;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.exceptions.UnauthorizedHandlerException;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequestDTO;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.Status;
@@ -29,6 +28,8 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.professional.services.Profe
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.ChildEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.ChildRepository;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Service
 public class SensoryProfileService {
@@ -45,15 +46,27 @@ public class SensoryProfileService {
         private ProfessionalService professionalService;
 
         // Criar novo perfil sensorial
-        public UUID create(SensoryProfileRequest request) {
+        public UUID create(UUID childId) {
 
-                ChildEntity child = childRepository.findById(request.getChildId())
+                ChildEntity child = childRepository.findById(childId)
                                 .orElseThrow(() -> new UsernameNotFoundException("Dependente não encontrado."));
+
+                // Calcular a idade da criança
+                Integer childAge = Period.between(child.getBirth(), LocalDate.now()).getYears();
+
+                // Definir o tipo de perfil sensorial com base na idade da criança
+                SensoryProfileType profileType;
+                if (childAge < 3) {
+                        profileType = SensoryProfileType.UNTIL_THREE_YEARS;
+                } else {
+                        profileType = SensoryProfileType.MORE_THAN_THREE_YEARS;
+                }
+
                 SensoryProfileEntity sensoryProfile = new SensoryProfileEntity();
                 sensoryProfile.setProfessional(professionalService.getCurrentProfessional());
                 sensoryProfile.setStatus(Status.UNFILLED);
                 sensoryProfile.setChild(child);
-                sensoryProfile.setProfileType(request.getProfileType());
+                sensoryProfile.setProfileType(profileType);
                 sensoryProfile.setCreatedAt(LocalDateTime.now());
                 sensoryProfile.setUpdatedAt(LocalDateTime.now());
                 sensoryProfile.setResultsOfSensoryProfile("");
@@ -120,13 +133,31 @@ public class SensoryProfileService {
 
         // Resultados de um perfil sensorial para crianças menores de 3 anos
         public ResultsOfSensoryProfileUntilThreeYearsDTO calculateSensoryProfileUntilThreeYears(
-                        ResultsRequestDTO request) {
+                        String sensoryProfileId) {
                 List<Integer> valuesToCalc = new ArrayList<>();
 
-                for (char c : request.getAnswers().toCharArray()) {
+                SensoryProfileEntity sensoryProfile = sensoryProfileRepository
+                                .findById(UUID.fromString(sensoryProfileId))
+                                .orElseThrow(() -> new UsernameNotFoundException("Perfil sensorial não encontrado."));
+
+                // Verificar se a criança realmente é menor de 3 anos
+                Optional<ChildEntity> child = childRepository.findById(sensoryProfile.getChild().getId());
+
+                Integer childAge = Period.between(child.get().getBirth(), LocalDate.now()).getYears();
+
+                if (childAge >= 3) {
+                        throw new UnauthorizedHandlerException("A criança não é menor de 3 anos.");
+                }
+
+                if (sensoryProfile.getResultsOfSensoryProfile().length() < 54) {
+                        throw new UnauthorizedHandlerException("Perfil sensorial ainda não foi finalizado.");
+                }
+
+                for (char c : sensoryProfile.getResultsOfSensoryProfile().toCharArray()) {
                         valuesToCalc.add(Character.getNumericValue(c));
                 }
 
+                // Criação do objeto de resultados com exploração, esquiva, sensibilidade, etc.
                 ResultsOfSensoryProfileUntilThreeYearsDTO results = new ResultsOfSensoryProfileUntilThreeYearsDTO();
 
                 results.setExploracao(valuesToCalc.get(17) + valuesToCalc.get(18) + valuesToCalc.get(19)
@@ -192,10 +223,27 @@ public class SensoryProfileService {
 
         // Resultados de um perfil sensorial para crianças maiores de 3 anos
         public ResultsOfSensoryProfileMoreThanThreeYearsDTO calculateSensoryProfileMoreThanThreeYears(
-                        ResultsRequestDTO request) {
+                        String sensoryProfileId) {
                 List<Integer> valuesToCalc = new ArrayList<>();
 
-                for (char c : request.getAnswers().toCharArray()) {
+                SensoryProfileEntity sensoryProfile = sensoryProfileRepository
+                                .findById(UUID.fromString(sensoryProfileId))
+                                .orElseThrow(() -> new UsernameNotFoundException("Perfil sensorial não encontrado."));
+
+                // Verificar se a criança realmente é igual ou maior que 3 anos
+                Optional<ChildEntity> child = childRepository.findById(sensoryProfile.getChild().getId());
+
+                Integer childAge = Period.between(child.get().getBirth(), LocalDate.now()).getYears();
+
+                if (childAge < 3) {
+                        throw new UnauthorizedHandlerException("A criança não é igual ou maior de 3 anos.");
+                }
+
+                if (sensoryProfile.getResultsOfSensoryProfile().length() < 86) {
+                        throw new UnauthorizedHandlerException("Perfil sensorial ainda não foi finalizado.");
+                }
+
+                for (char c : sensoryProfile.getResultsOfSensoryProfile().toCharArray()) {
                         valuesToCalc.add(Character.getNumericValue(c));
                 }
 
@@ -258,8 +306,7 @@ public class SensoryProfileService {
                 results.setVisual(valuesToCalc.get(8) + valuesToCalc.get(9) + valuesToCalc.get(10)
                                 + valuesToCalc.get(11)
                                 + valuesToCalc.get(12)
-                                + valuesToCalc.get(13) +
-                                valuesToCalc.get(14));
+                                + valuesToCalc.get(13));
 
                 results.setTato(valuesToCalc.get(15) + valuesToCalc.get(16) + valuesToCalc.get(17)
                                 + valuesToCalc.get(18)
@@ -303,14 +350,13 @@ public class SensoryProfileService {
                                 + valuesToCalc.get(79)
                                 + valuesToCalc.get(80) +
                                 valuesToCalc.get(81) + valuesToCalc.get(82) + valuesToCalc.get(83)
-                                + valuesToCalc.get(84)
-                                + valuesToCalc.get(85));
+                                + valuesToCalc.get(84));
 
                 return results;
         }
 
         // Obter perguntas de um perfil sensorial
-        public List<String> getQuestions(SensoryProfileTypeRequestDTO sensoryProfileTypeRequest) {
+        public List<String> getQuestions(SensoryProfileTypeRequest sensoryProfileTypeRequest) {
                 List<String> questionsList = new ArrayList<>();
                 SensoryProfileType sensoryProfileType = sensoryProfileTypeRequest.getSensoryProfileType();
 
