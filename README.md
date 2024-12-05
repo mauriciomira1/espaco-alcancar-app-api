@@ -1,5 +1,20 @@
 # Aplicação Espaço Alcançar
 
+![Java](https://img.shields.io/badge/Java-17-blue)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.5.4-brightgreen)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+## Tabela de Conteúdos
+
+- [Resumo](#resumo)
+- [Principais Funcionalidades](#principais-funcionalidades)
+- [Principais Dependências](#principais-dependências)
+- [Como Inicializar o Projeto](#como-inicializar-o-projeto)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Licença](#licença)
+- [Contato](#contato)
+
 ## Resumo
 
 A aplicação Espaço Alcançar tem como objetivo principal o cadastro de usuários e seus filhos para posterior preenchimento online do "Perfil Sensorial" da criança. O perfil preenchido ser disponibilizado para análise de um profissional. Existem três modelos de perfil sensorial que podem ser disponibilizados pelo profissional para os pais, via sistema:
