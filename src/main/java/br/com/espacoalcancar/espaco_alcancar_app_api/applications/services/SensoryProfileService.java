@@ -83,20 +83,21 @@ public class SensoryProfileService {
         public List<SensoryProfileResponse> listAllByProfessional() {
                 ProfessionalEntity professional = professionalService.getCurrentProfessional();
 
-                SensoryProfileResponse instant = new SensoryProfileResponse();
                 List<SensoryProfileResponse> response = new ArrayList<>();
                 List<SensoryProfileEntity> sensoryProfilesEntity = sensoryProfileRepository
                                 .findAllByProfessionalId(professional.getId());
 
                 sensoryProfilesEntity.forEach(entity -> {
-                        instant.setId(entity.getId());
-                        instant.setChildName(entity.getChild().getName());
-                        instant.setProfileType(entity.getProfileType().toString());
-                        instant.setStatus(entity.getStatus().toString());
-                        instant.setCreatedAt(entity.getCreatedAt().toString());
-                        instant.setUpdatedAt(entity.getUpdatedAt().toString());
-                        instant.setResultsOfSensoryProfile(entity.getResultsOfSensoryProfile());
-                        response.add(instant);
+                        SensoryProfileResponse spresponse = new SensoryProfileResponse();
+                        spresponse.setId(entity.getId());
+                        spresponse.setChildName(entity.getChild().getName());
+                        spresponse.setProfileType(entity.getProfileType().toString());
+                        spresponse.setStatus(entity.getStatus().toString());
+                        spresponse.setCreatedAt(entity.getCreatedAt().toString());
+                        spresponse.setUpdatedAt(entity.getUpdatedAt().toString());
+                        spresponse.setResultsOfSensoryProfile(entity.getResultsOfSensoryProfile());
+
+                        response.add(spresponse);
                 });
                 return response;
         }
@@ -351,7 +352,6 @@ public class SensoryProfileService {
                                 + valuesToCalc.get(80) +
                                 valuesToCalc.get(81) + valuesToCalc.get(82) + valuesToCalc.get(83)
                                 + valuesToCalc.get(84));
-
                 return results;
         }
 

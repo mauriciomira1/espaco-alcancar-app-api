@@ -41,9 +41,10 @@ public class SensoryProfileController {
   @PostMapping("/new")
   public ResponseEntity<String> create(@RequestBody CreateSensoryProfileTypeDTO childId) {
     try {
-      sensoryProfileService.create(UUID.fromString(childId.getChildId()));
-      return ResponseEntity.status(HttpStatus.CREATED).body("Perfil sensorial criado e disponibilizado com sucesso.");
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .body("Perfil sensorial criado e disponibilizado com sucesso");
     } catch (Exception e) {
+      e.printStackTrace();
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body("Erro ao cadastrar perfil sensorial. Tente mais tarde ou entre em contato com o suporte.");
     }
@@ -98,14 +99,17 @@ public class SensoryProfileController {
 
   // Obter as perguntas do perfil sensorial
   @GetMapping("/get-questions")
-  public ResponseEntity<List<String>> getQuestions(
-      @Valid @RequestBody SensoryProfileTypeRequest sensoryProfileType) {
-    List<String> questions = sensoryProfileService.getQuestions(sensoryProfileType);
-    return ResponseEntity.ok().body(questions);
+  public ResponseEntity<?> getQuestions(
+      @RequestBody SensoryProfileTypeRequest sensoryProfileType) {
+    try {
+      List<String> questions = sensoryProfileService.getQuestions(sensoryProfileType);
+      return ResponseEntity.ok().body(questions);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
-  // Obter as respostas do perfil sensorial para menores de três anos (mudar o
-  // requestBody para o ID da resposta, aí eu puxo os resultados por aqui)
+  // Obter as respostas do perfil sensorial para menores de três anos
   @GetMapping("/until-three-years")
   public ResponseEntity<?> getAnswersForChildrenUnderThreeYears(@RequestParam String id) {
     try {
@@ -117,8 +121,7 @@ public class SensoryProfileController {
     }
   }
 
-  // Obter as respostas do perfil sensorial para maiores de três anos(mudar o
-  // requestBody para o ID da resposta, aí eu puxo os resultados por aqui)
+  // Obter as respostas do perfil sensorial para maiores de três anos
   @GetMapping("/more-than-three-years")
   public ResponseEntity<?> getAnswersForChildrenMoreThreeYears(@RequestParam String id) {
     try {
