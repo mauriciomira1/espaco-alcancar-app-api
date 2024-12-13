@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserResponse;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
 import jakarta.validation.Valid;
 
@@ -37,7 +38,7 @@ public class UserController {
 
   // Buscar usuário
   @GetMapping("/me")
-  public UserDashboardResponse getCurrentUser() {
+  public UserEntity getCurrentUser() {
     return userService.getCurrentUser();
   }
 
@@ -49,7 +50,7 @@ public class UserController {
 
   // Editar dados do usuário
   @PutMapping("/edit")
-  public UserDashboardResponse updateUser(@Valid @RequestBody UserRequest request) {
+  public UserEntity updateUser(@Valid @RequestBody UserRequest request) {
     // Obtendo o objeto de autenticação atual
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -63,7 +64,7 @@ public class UserController {
     }
 
     var userId = principal.getId();
-    UserDashboardResponse updatedUser = userService.updateUser(userId, request);
+    UserEntity updatedUser = userService.updateUser(userId, request);
     return updatedUser;
   }
 

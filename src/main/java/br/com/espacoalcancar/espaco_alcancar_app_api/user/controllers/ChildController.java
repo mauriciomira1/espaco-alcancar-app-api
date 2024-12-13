@@ -66,7 +66,7 @@ public class ChildController {
 
   // Atualizar um dependente
   @PutMapping("/edit")
-  public UUID update(@Valid @RequestBody ChildUpdate childUpdate) {
+  public ChildResponse update(@Valid @RequestBody ChildUpdate childUpdate) {
     return this.childService.update(childUpdate);
   }
 

@@ -115,7 +115,7 @@ public class ChildService {
   }
 
   // Atualizar um filho
-  public UUID update(ChildUpdate request) {
+  public ChildResponse update(ChildUpdate request) {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -130,7 +130,9 @@ public class ChildService {
     entity.setName(request.getName());
     entity.setGender(request.getGender());
 
-    return childRepository.save(entity).getId();
+    childRepository.save(entity);
+
+    return convertEntityToDto(entity);
   }
 
   // Remover um filho
