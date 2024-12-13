@@ -97,7 +97,7 @@ public class UserService {
   }
 
   // Editar dados do usuário
-  public UserDashboardResponse updateUser(UUID userId, UserRequest request) {
+  public UserEntity updateUser(UUID userId, UserRequest request) {
     UserEntity userEntity = repository.findById(userId)
         .orElseThrow(() -> new UsernameNotFoundException("User not autenticated"));
 
@@ -107,14 +107,11 @@ public class UserService {
     }
 
     repository.save(userEntity);
-
-    UserDashboardResponse response = new UserDashboardResponse();
-    BeanUtils.copyProperties(userEntity, response);
-    return response;
+    return userEntity;
   }
 
   // Obter usuário atual
-  public UserDashboardResponse getCurrentUser() {
+  public UserEntity getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || !authentication.isAuthenticated()) {
       throw new RuntimeException("User is not authenticated");
@@ -125,7 +122,10 @@ public class UserService {
       throw new RuntimeException("User principal is not of expected type");
     }
 
-    return principal;
+    // Buscar o UserEntity baseado no ID do principal
+    UUID userId = principal.getId();
+    return repository.findById(userId)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found."));
   }
 
   // Classe acessória para conversão de UserEntity para UserResponse
