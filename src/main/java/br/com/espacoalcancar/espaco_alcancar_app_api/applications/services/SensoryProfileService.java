@@ -91,6 +91,7 @@ public class SensoryProfileService {
                         SensoryProfileResponse spresponse = new SensoryProfileResponse();
                         spresponse.setId(entity.getId());
                         spresponse.setChildName(entity.getChild().getName());
+                        spresponse.setChildId(entity.getChild().getId());
                         spresponse.setProfileType(entity.getProfileType().toString());
                         spresponse.setStatus(entity.getStatus().toString());
                         spresponse.setCreatedAt(entity.getCreatedAt().toString());
@@ -220,6 +221,19 @@ public class SensoryProfileService {
 
                 return results;
 
+        }
+
+        // Calcular perfil sensorial de acordo com idade da criança
+        public Object calculateSensoryProfile(String sensoryProfileId) {
+                SensoryProfileEntity sensoryProfile = sensoryProfileRepository
+                                .findById(UUID.fromString(sensoryProfileId))
+                                .orElseThrow(() -> new UsernameNotFoundException("Perfil sensorial não encontrado."));
+
+                if (sensoryProfile.getProfileType() == SensoryProfileType.UNTIL_THREE_YEARS) {
+                        return calculateSensoryProfileUntilThreeYears(sensoryProfileId);
+                } else {
+                        return calculateSensoryProfileMoreThanThreeYears(sensoryProfileId);
+                }
         }
 
         // Resultados de um perfil sensorial para crianças maiores de 3 anos

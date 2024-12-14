@@ -50,9 +50,9 @@ public class SensoryProfileController {
     }
   }
 
-  // Listar todos os perfis sensoriais de um profissional (perfil: profissional)
+  // Listar todos os perfis sensoriais de um profissional (perfil: admin)
   @GetMapping("/list-all-of-a-professional/{professionalId}")
-  public List<SensoryProfileResponse> listAllSensoryProfilesOfAProfessional(@PathVariable Integer professionalId) {
+  public List<SensoryProfileResponse> listAllSensoryProfilesOfAProfessional(@PathVariable String professionalId) {
     return sensoryProfileService.listAllByProfessional();
   }
 
@@ -109,28 +109,15 @@ public class SensoryProfileController {
     }
   }
 
-  // Obter as respostas do perfil sensorial para menores de três anos
-  @GetMapping("/until-three-years")
-  public ResponseEntity<?> getAnswersForChildrenUnderThreeYears(@RequestParam String id) {
+  // Obter as respostas de um perfil sensorial por ID da criança
+  @GetMapping("/get-answers-by-sp-id")
+  public ResponseEntity<?> getAnswersByChildId(@RequestParam String id) {
     try {
-      ResultsOfSensoryProfileUntilThreeYearsDTO answers = sensoryProfileService
-          .calculateSensoryProfileUntilThreeYears(id);
+      var answers = sensoryProfileService
+          .calculateSensoryProfile(id);
       return ResponseEntity.ok().body(answers);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
-
-  // Obter as respostas do perfil sensorial para maiores de três anos
-  @GetMapping("/more-than-three-years")
-  public ResponseEntity<?> getAnswersForChildrenMoreThreeYears(@RequestParam String id) {
-    try {
-      ResultsOfSensoryProfileMoreThanThreeYearsDTO answers = sensoryProfileService
-          .calculateSensoryProfileMoreThanThreeYears(id);
-      return ResponseEntity.ok().body(answers);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
-  }
-
 }

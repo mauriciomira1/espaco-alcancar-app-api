@@ -9,6 +9,7 @@ public class SensoryProfileResponse {
 
   private UUID id;
   private String childName;
+  private UUID childId;
   private String profileType;
   private String status;
   private String createdAt;

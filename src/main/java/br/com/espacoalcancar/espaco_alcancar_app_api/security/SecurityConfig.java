@@ -55,7 +55,10 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.GET, "/dashboard/sp/until-three-years").authenticated()
               .requestMatchers(HttpMethod.GET, "/dashboard/sp/more-than-three-years").authenticated()
               .requestMatchers(HttpMethod.GET, "/dashboard/sp/get-questions").authenticated()
+              .requestMatchers(HttpMethod.GET, "/dashboard/sp/get-answers-by-sp-id/**")
+              .hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
+              .requestMatchers(HttpMethod.GET, "/user/children/find/**").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated()
               .requestMatchers(HttpMethod.GET, "/professional/me").authenticated();
