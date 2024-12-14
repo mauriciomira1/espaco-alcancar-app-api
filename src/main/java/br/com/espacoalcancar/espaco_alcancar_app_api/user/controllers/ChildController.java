@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +57,12 @@ public class ChildController {
 
     List<ChildResponse> childResponses = this.childService.list(userId);
     return childResponses;
+  }
+
+  // Buscar um dependente por ID
+  @GetMapping("/find/{childId}")
+  public ChildResponse find(@PathVariable UUID childId) {
+    return this.childService.findById(childId);
   }
 
   // Listar todos os dependentes cadastrados
