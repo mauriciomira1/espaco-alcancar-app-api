@@ -4,13 +4,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileMoreThanThreeYearsDTO;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileUntilThreeYearsDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsRequestDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.CreateSensoryProfileTypeDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
+import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.services.ResultsOfSensoryProfileService;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.services.SensoryProfileService;
 import jakarta.validation.Valid;
@@ -86,6 +84,17 @@ public class SensoryProfileController {
     }
   }
 
+  // Buscar um perfil sensorial pelo seu ID (perfil: profissional)
+  @GetMapping("/find-sp/{id}")
+  public ResponseEntity<?> findSensoryProfileById(@PathVariable UUID id) {
+    try {
+      SensoryProfileResponse response = sensoryProfileService.getSensoryProfile(id);
+      return ResponseEntity.ok().body(response);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
   // Preencher um perfil sensorial (perfil: paciente)
   @PutMapping("/fillout")
   public ResponseEntity<String> fillOutSensoryProfile(@Valid @RequestBody ResultsRequestDTO results) {
@@ -99,8 +108,7 @@ public class SensoryProfileController {
 
   // Obter as perguntas do perfil sensorial
   @GetMapping("/get-questions")
-  public ResponseEntity<?> getQuestions(
-      @RequestBody SensoryProfileTypeRequest sensoryProfileType) {
+  public ResponseEntity<?> getQuestions(@RequestParam SensoryProfileType sensoryProfileType) {
     try {
       List<String> questions = sensoryProfileService.getQuestions(sensoryProfileType);
       return ResponseEntity.ok().body(questions);
@@ -109,9 +117,9 @@ public class SensoryProfileController {
     }
   }
 
-  // Obter as respostas de um perfil sensorial por ID da criança
+  // Obter as respostas de um perfil sensorial por ID do perfil
   @GetMapping("/get-answers-by-sp-id")
-  public ResponseEntity<?> getAnswersByChildId(@RequestParam String id) {
+  public ResponseEntity<?> getAnswersBySensoryProfileId(@RequestParam String id) {
     try {
       var answers = sensoryProfileService
           .calculateSensoryProfile(id);

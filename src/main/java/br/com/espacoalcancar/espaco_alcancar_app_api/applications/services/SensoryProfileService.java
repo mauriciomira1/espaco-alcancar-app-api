@@ -18,7 +18,6 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.Res
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.ResultsOfSensoryProfileUntilThreeYearsDTO;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.exceptions.UnauthorizedHandlerException;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileResponse;
-import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.dto.SensoryProfileTypeRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.SensoryProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.applications.models.entities.Status;
@@ -133,6 +132,22 @@ public class SensoryProfileService {
                 });
         }
 
+        // Buscar um perfil sensorial
+        public SensoryProfileResponse getSensoryProfile(UUID sensoryProfileId) {
+                SensoryProfileEntity entity = sensoryProfileRepository.findById(sensoryProfileId)
+                                .orElseThrow(() -> new UsernameNotFoundException("Perfil sensorial não encontrado."));
+                SensoryProfileResponse response = new SensoryProfileResponse();
+                response.setId(entity.getId());
+                response.setChildName(entity.getChild().getName());
+                response.setChildId(entity.getChild().getId());
+                response.setProfileType(entity.getProfileType().toString());
+                response.setStatus(entity.getStatus().toString());
+                response.setCreatedAt(entity.getCreatedAt().toString());
+                response.setUpdatedAt(entity.getUpdatedAt().toString());
+                response.setResultsOfSensoryProfile(entity.getResultsOfSensoryProfile());
+                return response;
+        }
+
         // Resultados de um perfil sensorial para crianças menores de 3 anos
         public ResultsOfSensoryProfileUntilThreeYearsDTO calculateSensoryProfileUntilThreeYears(
                         String sensoryProfileId) {
@@ -198,18 +213,15 @@ public class SensoryProfileService {
 
                 results.setVisual(valuesToCalc.get(17) + valuesToCalc.get(18) + valuesToCalc.get(19)
                                 + valuesToCalc.get(20)
-                                + valuesToCalc.get(21) + valuesToCalc.get(22) + valuesToCalc.get(23)
-                                + valuesToCalc.get(24));
+                                + valuesToCalc.get(21) + valuesToCalc.get(22));
 
                 results.setTato(valuesToCalc.get(25) + valuesToCalc.get(26) + valuesToCalc.get(27)
                                 + valuesToCalc.get(28)
-                                + valuesToCalc.get(29) + valuesToCalc.get(30) + valuesToCalc.get(31)
-                                + valuesToCalc.get(32)
-                                + valuesToCalc.get(33) + valuesToCalc.get(34));
+                                + valuesToCalc.get(29) + valuesToCalc.get(30));
 
                 results.setMovimentos(valuesToCalc.get(35) + valuesToCalc.get(36) + valuesToCalc.get(37)
                                 + valuesToCalc.get(38)
-                                + valuesToCalc.get(39) + valuesToCalc.get(40));
+                                + valuesToCalc.get(39));
 
                 results.setSensibilidadeOral(valuesToCalc.get(41) + valuesToCalc.get(42) + valuesToCalc.get(43)
                                 + valuesToCalc.get(44)
@@ -370,9 +382,8 @@ public class SensoryProfileService {
         }
 
         // Obter perguntas de um perfil sensorial
-        public List<String> getQuestions(SensoryProfileTypeRequest sensoryProfileTypeRequest) {
+        public List<String> getQuestions(SensoryProfileType sensoryProfileType) {
                 List<String> questionsList = new ArrayList<>();
-                SensoryProfileType sensoryProfileType = sensoryProfileTypeRequest.getSensoryProfileType();
 
                 if (sensoryProfileType == SensoryProfileType.UNTIL_THREE_YEARS) {
                         questionsList.add("1. Precisa de uma rotina para permanecer satisfeito(a) ou calmo(a).");
