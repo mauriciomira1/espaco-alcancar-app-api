@@ -58,6 +58,7 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.GET, "/dashboard/sp/get-answers-by-sp-id/**")
               .hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/children/list").authenticated()
+              .requestMatchers(HttpMethod.GET, "/user/children/list-with-data").authenticated()
               .requestMatchers(HttpMethod.GET, "/user/children/find/**").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/children/list-all").hasAnyRole("ADMIN", "PROFESSIONAL")
               .requestMatchers(HttpMethod.GET, "/user/me").authenticated()
