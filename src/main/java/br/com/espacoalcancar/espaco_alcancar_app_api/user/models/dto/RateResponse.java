@@ -6,10 +6,8 @@ import lombok.Data;
 
 @Data
 public class RateResponse {
-
   private Integer stars;
   private String comment;
   private Integer userId;
   private LocalDateTime createdAt;
-
 }

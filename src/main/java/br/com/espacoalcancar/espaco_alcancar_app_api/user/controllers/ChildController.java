@@ -2,6 +2,7 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildFullDataResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildUpdate;
@@ -56,6 +57,27 @@ public class ChildController {
     UUID userId = principal.getId();
 
     List<ChildResponse> childResponses = this.childService.list(userId);
+    return childResponses;
+  }
+
+  @GetMapping("/list-with-data")
+  public List<ChildFullDataResponse> listWithData() {
+
+    // buscar ID do usuário logado
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new RuntimeException("User is not authenticated");
+    }
+
+    var principal = (UserDashboardResponse) authentication.getPrincipal();
+    if (!(principal instanceof UserDashboardResponse)) {
+      throw new RuntimeException("User principal is not of expected type");
+    }
+
+    UUID userId = principal.getId();
+
+    List<ChildFullDataResponse> childResponses = this.childService.listWithData(userId);
     return childResponses;
   }
 

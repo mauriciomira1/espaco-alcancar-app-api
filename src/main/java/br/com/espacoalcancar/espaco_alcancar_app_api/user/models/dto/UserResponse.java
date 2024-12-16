@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class UserResponse {
-
   private UUID id;
   private String name;
-
 }
