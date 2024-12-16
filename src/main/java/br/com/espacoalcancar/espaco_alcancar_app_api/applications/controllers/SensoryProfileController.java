@@ -39,6 +39,7 @@ public class SensoryProfileController {
   @PostMapping("/new")
   public ResponseEntity<String> create(@RequestBody CreateSensoryProfileTypeDTO childId) {
     try {
+      sensoryProfileService.create(childId.getChildId());
       return ResponseEntity.status(HttpStatus.CREATED)
           .body("Perfil sensorial criado e disponibilizado com sucesso");
     } catch (Exception e) {
