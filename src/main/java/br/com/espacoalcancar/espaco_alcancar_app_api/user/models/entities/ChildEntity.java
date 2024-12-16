@@ -66,5 +66,4 @@ public class ChildEntity {
   @Temporal(TemporalType.TIMESTAMP)
   @Column(nullable = false, name = "updated_at")
   private LocalDateTime updatedAt = LocalDateTime.now();
-
 }

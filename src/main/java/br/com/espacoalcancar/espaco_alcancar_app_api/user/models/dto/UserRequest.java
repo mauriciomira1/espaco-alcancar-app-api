@@ -10,7 +10,6 @@ import lombok.Data;
 
 @Data
 public class UserRequest {
-
   @Length(min = 8, max = 70, message = "O campo [nome] deve ter pelo menos 8 caracteres.")
   private String name;
 
