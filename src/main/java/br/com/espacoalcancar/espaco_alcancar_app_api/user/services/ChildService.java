@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildFullDataResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.ChildUpdate;
@@ -75,23 +74,6 @@ public class ChildService {
     List<ChildResponse> response = new ArrayList<>();
     for (ChildEntity entityChild : entity) {
       response.add(convertEntityToDto(entityChild));
-    }
-    return response;
-  }
-
-  public List<ChildFullDataResponse> listWithData(UUID userId) {
-    Iterable<ChildEntity> entity = childRepository.findAllByUserId(userId);
-    List<ChildFullDataResponse> response = new ArrayList<>();
-    for (ChildEntity entityChild : entity) {
-      ChildFullDataResponse child = new ChildFullDataResponse();
-      child.setId(entityChild.getId());
-      child.setName(entityChild.getName());
-      child.setBirth(entityChild.getBirth());
-      child.setSensoryProfiles(entityChild.getSensoryProfiles());
-      child.setGender(entityChild.getGender());
-      child.setCreatedAt(entityChild.getCreatedAt().toLocalDate());
-      child.setUpdatedAt(entityChild.getUpdatedAt().toLocalDate());
-      response.add(child);
     }
     return response;
   }
