@@ -50,6 +50,7 @@ public class AuthUserController {
     }
   }
 
+  // Atualização do token
   @PostMapping("/auth/refresh")
   public ResponseEntity<Object> refresh(HttpServletRequest request, HttpServletResponse response) {
     try {
@@ -76,8 +77,7 @@ public class AuthUserController {
 
       // Gerando novos tokens
       String newToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofHours(2)));
-      String newRefreshToken = this.jwt.generateToken(userId,
-          Instant.now().plus(Duration.ofDays(30)));
+      String newRefreshToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofDays(30)));
 
       // Atualizando o refresh token no cookie
       Cookie newRefreshTokenCookie = new Cookie("refreshToken", newRefreshToken);
