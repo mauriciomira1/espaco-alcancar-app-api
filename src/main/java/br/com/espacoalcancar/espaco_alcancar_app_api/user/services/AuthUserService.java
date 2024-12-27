@@ -18,6 +18,8 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserRes
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.UserRepository;
 
+import java.util.UUID;
+
 @Service
 public class AuthUserService {
 
@@ -58,7 +60,7 @@ public class AuthUserService {
 
     // Gerando token e refreshToken
     String token = jwt.generateToken(user.getId(), Instant.now().plus(Duration.ofHours(2)));
-    String refreshToken = jwt.generateToken(user.getId(), Instant.now().plus(Duration.ofDays(2)));
+    String refreshToken = jwt.generateToken(user.getId(), Instant.now().plus(Duration.ofDays(30)));
 
     AuthUserResponse response = new AuthUserResponse();
     response.setToken(token);
@@ -66,5 +68,17 @@ public class AuthUserService {
     response.setRoles(roles);
 
     return response;
+  }
+
+  // Atualizar token usando refreshToken
+  public String refreshToken(String refreshToken) throws AuthenticationException {
+    UUID userId = UUID.fromString(jwt.validateToken(refreshToken));
+    if (userId == null) {
+      throw new AuthenticationException("Invalid refresh token.");
+    }
+
+    // Gerando novo token
+    String newToken = jwt.generateToken(userId, Instant.now().plus(Duration.ofHours(2)));
+    return newToken;
   }
 }
