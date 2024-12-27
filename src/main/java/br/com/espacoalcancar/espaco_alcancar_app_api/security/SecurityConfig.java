@@ -41,6 +41,7 @@ public class SecurityConfig {
               /* Requisições POST */
               .requestMatchers(HttpMethod.POST, "/user/new").permitAll()
               .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+              .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
               .requestMatchers(HttpMethod.POST, "/dashboard/sp/new")
               .hasAnyRole("ADMIN", "PROFESSIONAL")
 

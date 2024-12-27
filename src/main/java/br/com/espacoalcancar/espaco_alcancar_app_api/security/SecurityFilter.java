@@ -68,16 +68,14 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
       }
       List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-      if (userEntity instanceof UserDashboardResponse) {
-        UserDashboardResponse user = (UserDashboardResponse) userEntity;
+      if (userEntity instanceof UserDashboardResponse user) {
         if (user.getProfileType().isAdmin()) {
           authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         if (user.getProfileType().isPatient()) {
           authorities.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
         }
-      } else if (userEntity instanceof ProfessionalEntity) {
-        ProfessionalEntity professional = (ProfessionalEntity) userEntity;
+      } else if (userEntity instanceof ProfessionalEntity professional) {
         if (professional.getProfileType().isProfessional()) {
           authorities.add(new SimpleGrantedAuthority("ROLE_PROFESSIONAL"));
         }
