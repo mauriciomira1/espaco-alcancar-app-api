@@ -45,6 +45,21 @@ public class AuthProfessionalController {
     }
   }
 
+  // Verificação de token válido
+  @PostMapping("/auth/professional/validate")
+  public ResponseEntity<Object> validate(@RequestBody String token) {
+    try {
+      String professionalId = this.jwt.validateToken(token);
+      if (professionalId == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token.");
+      }
+
+      return ResponseEntity.ok().body(professionalId);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+  }
+
   // Atualização do token
   @PostMapping("/auth/professional/refresh")
   public ResponseEntity<Object> refresh(HttpServletRequest request, HttpServletResponse response) {
