@@ -50,6 +50,21 @@ public class AuthUserController {
     }
   }
 
+  // Verificação de token válido
+  @PostMapping("/auth/validate")
+  public ResponseEntity<Object> validate(@RequestBody String token) {
+    try {
+      UUID userId = UUID.fromString(this.jwt.validateToken(token));
+      if (userId == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token.");
+      }
+
+      return ResponseEntity.ok().body("Valid token.");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+  }
+
   // Atualização do token
   @PostMapping("/auth/refresh")
   public ResponseEntity<Object> refresh(HttpServletRequest request, HttpServletResponse response) {
@@ -76,7 +91,7 @@ public class AuthUserController {
       }
 
       // Gerando novos tokens
-      String newToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofHours(2)));
+      String newToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofMinutes(1)));
       String newRefreshToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofDays(30)));
 
       // Atualizando o refresh token no cookie
