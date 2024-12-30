@@ -45,9 +45,7 @@ public class AuthUserService {
   public AuthUserResponse execute(AuthUserRequest authUserRequest) throws AuthenticationException {
 
     UserEntity user = this.userRepository.findByEmail(authUserRequest.getEmail())
-        .orElseThrow(() -> {
-          throw new UsernameNotFoundException("Username/password incorrect.");
-        });
+        .orElseThrow(() -> new UsernameNotFoundException("Username/password incorrect."));
 
     // Verificar se senhas são iguais
     var passwordMatches = this.passwordEncoder.matches(authUserRequest.getPassword(), user.getPassword());
