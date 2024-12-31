@@ -1,14 +1,21 @@
+package br.com.espacoalcancar.espaco_alcancar_app_api.user.services;
+
+import br.com.espacoalcancar.espaco_alcancar_app_api.providers.JWTProvider;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.naming.AuthenticationException;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+
+
 
 @ExtendWith(MockitoExtension.class)
 public class AuthUserServiceTest {
@@ -37,10 +46,9 @@ public class AuthUserServiceTest {
 
     @Test
     public void testExecute_Success() throws AuthenticationException {
-        AuthUserRequest request = new AuthUserRequest("test@test.com", "12345678");
+        AuthUserRequest request = new AuthUserRequest("test@test.com", "encodedPassword");
 
         UserEntity user = new UserEntity();
-        user.setId(UUID.randomUUID());
         user.setEmail("test@test.com");
         user.setPassword("encodedPassword");
 
@@ -72,12 +80,9 @@ public class AuthUserServiceTest {
 
     @Test
     public void testExecute_InvalidPassword() {
-        AuthUserRequest request = new AuthUserRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("password");
+        AuthUserRequest request = new AuthUserRequest("test@example.com", "password");
 
         UserEntity user = new UserEntity();
-        user.setId(UUID.randomUUID());
         user.setEmail("test@example.com");
         user.setPassword("encodedPassword");
 
