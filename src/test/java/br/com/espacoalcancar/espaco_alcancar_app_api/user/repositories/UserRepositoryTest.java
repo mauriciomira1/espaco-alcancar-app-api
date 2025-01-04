@@ -33,7 +33,7 @@ class UserRepositoryTest {
     UserRepository userRepository;
 
     @Test
-    @DisplayName("Should get User successfuly from DB")
+    @DisplayName("Should get User successfuly from DB by name attribute")
     void findByNameSuccess() {
         String name = "User Test";
         UserRequest data = new UserRequest(name, "12345678", "123456789", "test@test.com", Relationship.OTHER,
@@ -50,6 +50,27 @@ class UserRepositoryTest {
         String name = "User Test";
 
         Optional<UserEntity> result = this.userRepository.findByName(name);
+        assertThat(result.isEmpty()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should get User successfuly from DB by email attribute")
+    void findByEmailSuccess() {
+        String email = "test@test.com";
+        UserRequest data = new UserRequest("User Test", "12345678", "123456789", email, Relationship.OTHER,
+                new Address(), new ProfileType(true, false, false));
+        this.createUser(data);
+
+        Optional<UserEntity> result = this.userRepository.findByEmail(email);
+        assertThat(result.isPresent()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should not get User successfuly from DB when email is not found")
+    void findByEmailNotFound() {
+        String email = "test@test.com";
+
+        Optional<UserEntity> result = this.userRepository.findByEmail(email);
         assertThat(result.isEmpty()).isTrue();
     }
 
