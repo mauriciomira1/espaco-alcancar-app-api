@@ -29,7 +29,7 @@ public class UserController {
 
   UUID userId;
 
-  // Criar novo usuário paciente
+  // Criar novo usuário
   @PostMapping("/new")
   public UUID create(@Valid @RequestBody UserRequest request) {
     userId = userService.create(request);
