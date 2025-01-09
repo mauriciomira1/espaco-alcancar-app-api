@@ -5,12 +5,16 @@ import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserReq
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.entities.UserEntity;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.repositories.UserRepository;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.naming.AuthenticationException;
@@ -22,18 +26,15 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
-
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Test AuthUserService Class")
 public class AuthUserServiceTest {
 
     @InjectMocks
     AuthUserService authUserService;
-
-    @Mock
-    UserRepository userRepository;
 
     @Mock
     UserService userService;
@@ -44,48 +45,51 @@ public class AuthUserServiceTest {
     @Mock
     JWTProvider jwt;
 
+    @Mock
+    UserRepository userRepository;
+
+    private AuthUserRequest request;
+    private UserEntity user;
+
+    @BeforeEach
+    void beforeEachMethod() {
+        MockitoAnnotations.openMocks(this);
+        request = new AuthUserRequest("test@test.com", "password");
+        user = createUserEntity("test@test.com", "encodedPassword");
+    }
+
     @Test
-    public void testExecute_Success() throws AuthenticationException {
-        AuthUserRequest request = new AuthUserRequest("test@test.com", "encodedPassword");
+    void testLogin_When_InsertAValidUsernameAndPassword_ShouldReturnSuccess() throws AuthenticationException {
 
-        UserEntity user = new UserEntity();
-        user.setEmail("test@test.com");
-        user.setPassword("encodedPassword");
-
+        // When
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
-        when(userService.getUserRoles(anyString())).thenReturn(List.of("ROLE_USER"));
         when(jwt.generateToken(any(UUID.class), any(Instant.class))).thenReturn("token");
+        when(userService.getUserRoles(anyString())).thenReturn(List.of("ROLE_USER"));
 
         AuthUserResponse response = authUserService.execute(request);
 
+        // Then
         assertNotNull(response);
         assertEquals("token", response.getToken());
         assertEquals("token", response.getRefreshToken());
         assertEquals(List.of("ROLE_USER"), response.getRoles());
+
+        // Capturar os argumentos passados para generateToken
+        ArgumentCaptor<UUID> uuidCaptor = ArgumentCaptor.forClass(UUID.class);
+        ArgumentCaptor<Instant> instantCaptor = ArgumentCaptor.forClass(Instant.class);
+        verify(jwt).generateToken(uuidCaptor.capture(), instantCaptor.capture());
+
+        // Verificar se os argumentos capturados são os esperados
+        assertEquals(user.getId(), uuidCaptor.getValue());
+        assertNotNull(instantCaptor.getValue());
+
     }
 
     @Test
-    public void testExecute_UserNotFound() {
-        AuthUserRequest request = new AuthUserRequest("test@example.com", "password");
+    void testLogin_When_PasswordIsIncorrect_ShouldReturnInvalidPassword() {
 
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-        request.setEmail("test@example.com");
-        request.setPassword("password");
-
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-
-        assertThrows(UsernameNotFoundException.class, () -> authUserService.execute(request));
-    }
-
-    @Test
-    public void testExecute_InvalidPassword() {
-        AuthUserRequest request = new AuthUserRequest("test@example.com", "password");
-
-        UserEntity user = new UserEntity();
-        user.setEmail("test@example.com");
-        user.setPassword("encodedPassword");
-
+        // When
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
@@ -93,8 +97,17 @@ public class AuthUserServiceTest {
     }
 
     @Test
-    public void testRefreshToken_Success() throws AuthenticationException {
-        String refreshToken = "validRefreshToken";
+    void testLogin_When_UserNotFound_ShouldReturnAException() {
+        AuthUserRequest request = new AuthUserRequest("test@test.com", "password");
+
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(AuthenticationException.class, () -> authUserService.execute(request));
+    }
+
+    @Test
+    void testRefreshToken_When_RefreshTokenIsValid_ShouldRenewToken() throws AuthenticationException {
+        String refreshToken = "refreshToken";
         UUID userId = UUID.randomUUID();
 
         when(jwt.validateToken(anyString())).thenReturn(userId.toString());
@@ -106,11 +119,18 @@ public class AuthUserServiceTest {
     }
 
     @Test
-    public void testRefreshToken_InvalidToken() {
+    void testRefreshToken_When_RefreshTokenIsInvalid_ShouldReturnAException() throws AuthenticationException {
         String refreshToken = "invalidRefreshToken";
 
         when(jwt.validateToken(anyString())).thenReturn(null);
 
         assertThrows(AuthenticationException.class, () -> authUserService.refreshToken(refreshToken));
+    }
+
+    private UserEntity createUserEntity(String email, String password) {
+        UserEntity user = new UserEntity();
+        user.setEmail(email);
+        user.setPassword(password);
+        return user;
     }
 }

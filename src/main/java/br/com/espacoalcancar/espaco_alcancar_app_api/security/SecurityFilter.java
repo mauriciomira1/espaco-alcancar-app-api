@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,7 +43,14 @@ public class SecurityFilter extends OncePerRequestFilter {
     String header = request.getHeader("Authorization");
     if (header != null && header.startsWith("Bearer ")) {
       String token = header.substring(7);
-      var subjectToken = jwtProvider.validateToken(token);
+      String subjectToken;
+      try {
+        subjectToken = jwtProvider.validateToken(token);
+      } catch (AuthenticationException e) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Invalid token");
+        return;
+      }
       if (subjectToken.isEmpty()) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("Token is empty or invalid");
