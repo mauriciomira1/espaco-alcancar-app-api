@@ -27,13 +27,13 @@ class UserRepositoryTest {
     EntityManager entityManager;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     UserRepository userRepository;
 
     @Test
-    @DisplayName("Should get User successfuly from DB by name attribute")
+    @DisplayName("Should get User successfully from DB by name attribute")
     void findByNameSuccess() {
         String name = "User Test";
         UserRequest data = new UserRequest(name, "12345678", "123456789", "test@test.com", Relationship.OTHER,
@@ -45,7 +45,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should not get User successfuly from DB when name is not found")
+    @DisplayName("Should not get User successfully from DB when name is not found")
     void findByNameNotFound() {
         String name = "User Test";
 
@@ -54,7 +54,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should get User successfuly from DB by email attribute")
+    @DisplayName("Should get User successfully from DB by email attribute")
     void findByEmailSuccess() {
         String email = "test@test.com";
         UserRequest data = new UserRequest("User Test", "12345678", "123456789", email, Relationship.OTHER,
@@ -66,7 +66,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should not get User successfuly from DB when email is not found")
+    @DisplayName("Should not get User successfully from DB when email is not found")
     void findByEmailNotFound() {
         String email = "test@test.com";
 

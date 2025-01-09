@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.util.List;
 
 import javax.naming.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +44,7 @@ public class AuthUserService {
   public AuthUserResponse execute(AuthUserRequest authUserRequest) throws AuthenticationException {
 
     UserEntity user = this.userRepository.findByEmail(authUserRequest.getEmail())
-        .orElseThrow(() -> new UsernameNotFoundException("Username/password incorrect."));
+        .orElseThrow(() -> new AuthenticationException("Username/password incorrect."));
 
     // Verificar se senhas são iguais
     var passwordMatches = this.passwordEncoder.matches(authUserRequest.getPassword(), user.getPassword());
@@ -70,13 +69,17 @@ public class AuthUserService {
 
   // Atualizar token usando refreshToken
   public String refreshToken(String refreshToken) throws AuthenticationException {
-    UUID userId = UUID.fromString(jwt.validateToken(refreshToken));
-    if (userId == null) {
-      throw new AuthenticationException("Invalid refresh token.");
-    }
+    try {
+      UUID userId = UUID.fromString(jwt.validateToken(refreshToken));
+      if (userId == null) {
+        throw new AuthenticationException("Invalid refresh token.");
+      }
 
-    // Gerando novo token
-    String newToken = jwt.generateToken(userId, Instant.now().plus(Duration.ofHours(2)));
-    return newToken;
+      // Gerando novo token
+      String newToken = jwt.generateToken(userId, Instant.now().plus(Duration.ofHours(2)));
+      return newToken;
+    } catch (Exception e) {
+      throw new AuthenticationException(e.getMessage());
+    }
   }
 }
