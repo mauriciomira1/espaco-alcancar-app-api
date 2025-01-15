@@ -3,6 +3,8 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.providers;
 import java.time.Instant;
 import java.util.UUID;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +30,7 @@ public class JWTProvider {
     return token;
   }
 
-  public String validateToken(String token) {
+  public String validateToken(String token) throws AuthenticationException {
     token = token.replace("Bearer ", "");
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
@@ -39,7 +41,7 @@ public class JWTProvider {
           .getSubject();
       return subject; // ID do usuário
     } catch (JWTVerificationException e) {
-      return null;
+      throw new AuthenticationException(e.getMessage());
     }
   }
 }
