@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.exceptions.UserAlreadyExistsException;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
@@ -82,6 +83,11 @@ public class UserService {
 
   // Criar novo usuário
   public UUID create(UserRequest request) {
+    // Verificar se o usuário já existe
+    if (repository.findByEmail(request.getEmail()).isPresent()) {
+      throw new UserAlreadyExistsException("E-mail já cadastrado: " + request.getEmail());
+    }
+
     UserEntity entity = new UserEntity();
 
     request.setProfileType(new ProfileType(true, false, false));

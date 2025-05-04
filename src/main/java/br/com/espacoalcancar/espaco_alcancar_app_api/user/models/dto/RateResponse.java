@@ -1,6 +1,7 @@
 package br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.Data;
 
@@ -8,6 +9,6 @@ import lombok.Data;
 public class RateResponse {
   private Integer stars;
   private String comment;
-  private Integer userId;
+  private UUID userId;
   private LocalDateTime createdAt;
 }
