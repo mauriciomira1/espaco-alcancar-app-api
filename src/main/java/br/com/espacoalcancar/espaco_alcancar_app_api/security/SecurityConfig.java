@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import br.com.espacoalcancar.espaco_alcancar_app_api.professional.services.ProfessionalService;
@@ -26,9 +27,11 @@ public class SecurityConfig {
   @Autowired
   private ProfessionalService professionalService;
 
+  @Autowired
+  private FirebaseTokenFilter firebaseTokenFilter;
+
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    SecurityFilter securityFilter = new SecurityFilter(jwtProvider, userService, professionalService);
     http
         .cors(cors -> cors.configure(http))
         .csrf(csrf -> csrf.disable())
@@ -65,7 +68,7 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.GET, "/professional/me").authenticated();
           auth.anyRequest().authenticated();
         })
-        .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
+        .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 }

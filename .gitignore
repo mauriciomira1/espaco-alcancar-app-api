@@ -6,6 +6,7 @@ target/
 
 # Spring Boot application properties
 src/main/resources/application.properties
+src/main/resources/firebase-service-account.json
 
 ### STS ###
 .apt_generated
