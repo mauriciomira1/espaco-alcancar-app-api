@@ -6,7 +6,7 @@ target/
 
 # Spring Boot application properties
 src/main/resources/application.properties
-src/main/resources/firebase-service-account.json
+src/main/resources/espaco-alcancar-fd4bf-firebase-adminsdk-fbsvc-15dbe26e3f.json
 
 ### STS ###
 .apt_generated
