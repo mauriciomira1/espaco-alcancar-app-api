@@ -8,24 +8,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
-import br.com.espacoalcancar.espaco_alcancar_app_api.professional.services.ProfessionalService;
-import br.com.espacoalcancar.espaco_alcancar_app_api.providers.JWTProvider;
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-  @Autowired
-  private JWTProvider jwtProvider;
-
-  @Autowired
-  private UserService userService;
-
-  @Autowired
-  private ProfessionalService professionalService;
+  /*
+   * @Autowired
+   * private JWTProvider jwtProvider;
+   * 
+   * @Autowired
+   * private UserService userService;
+   * 
+   * @Autowired
+   * private ProfessionalService professionalService;
+   */
 
   @Autowired
   private FirebaseTokenFilter firebaseTokenFilter;

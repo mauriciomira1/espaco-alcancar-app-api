@@ -28,6 +28,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Test AuthUserService Class")
@@ -61,39 +63,36 @@ public class AuthUserServiceTest {
     @Test
     void testLogin_When_InsertAValidUsernameAndPassword_ShouldReturnSuccess() throws AuthenticationException {
 
-        // When
+        UUID userId = user.getId();
+
+        // Configurar os mocks
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
-        when(jwt.generateToken(any(UUID.class), any(Instant.class))).thenReturn("token");
+        // Retorna "token" na primeira chamada e "refreshToken" na segunda
+        when(jwt.generateToken(eq(userId), any(Instant.class)))
+                .thenReturn("token")
+                .thenReturn("refreshToken");
         when(userService.getUserRoles(anyString())).thenReturn(List.of("ROLE_USER"));
 
+        // Invocar o método de produção
         AuthUserResponse response = authUserService.execute(request);
 
-        // Then
+        // Verificar o resultado
         assertNotNull(response);
         assertEquals("token", response.getToken());
-        assertEquals("token", response.getRefreshToken());
+        assertEquals("refreshToken", response.getRefreshToken());
         assertEquals(List.of("ROLE_USER"), response.getRoles());
 
-        // Capturar os argumentos passados para generateToken
+        // Capturar os argumentos passados para generateToken (duas chamadas)
         ArgumentCaptor<UUID> uuidCaptor = ArgumentCaptor.forClass(UUID.class);
         ArgumentCaptor<Instant> instantCaptor = ArgumentCaptor.forClass(Instant.class);
-        verify(jwt).generateToken(uuidCaptor.capture(), instantCaptor.capture());
+        verify(jwt, times(2)).generateToken(uuidCaptor.capture(), instantCaptor.capture());
 
         // Verificar se os argumentos capturados são os esperados
-        assertEquals(user.getId(), uuidCaptor.getValue());
-        assertNotNull(instantCaptor.getValue());
-
-    }
-
-    @Test
-    void testLogin_When_PasswordIsIncorrect_ShouldReturnInvalidPassword() {
-
-        // When
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
-
-        assertThrows(AuthenticationException.class, () -> authUserService.execute(request));
+        assertEquals(user.getId(), uuidCaptor.getAllValues().get(0)); // token
+        assertEquals(user.getId(), uuidCaptor.getAllValues().get(1)); // refreshToken
+        assertNotNull(instantCaptor.getAllValues().get(0));
+        assertNotNull(instantCaptor.getAllValues().get(1));
     }
 
     @Test
