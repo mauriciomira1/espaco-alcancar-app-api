@@ -14,8 +14,14 @@ public class FirebaseConfig {
 
     @PostConstruct
     public void init() throws IOException {
-        InputStream serviceAccount =
-                getClass().getClassLoader().getResourceAsStream("espaco-alcancar-fd4bf-firebase-adminsdk-fbsvc-15dbe26e3f.json");
+        // Tenta carregar o arquivo do resources
+        InputStream serviceAccount = getClass()
+                .getClassLoader()
+                .getResourceAsStream("espaco-alcancar-fd4bf-firebase-adminsdk-fbsvc-15dbe26e3f.json");
+
+        if (serviceAccount == null) {
+            throw new IOException("Arquivo de credencial do Firebase não encontrado em resources!");
+        }
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -26,4 +32,3 @@ public class FirebaseConfig {
         }
     }
 }
-

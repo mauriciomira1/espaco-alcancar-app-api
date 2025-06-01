@@ -2,6 +2,8 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.naming.AuthenticationException;
@@ -13,10 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
+
 import br.com.espacoalcancar.espaco_alcancar_app_api.providers.JWTProvider;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserRequest;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.AuthUserResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.AuthUserService;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +35,9 @@ public class AuthUserController {
 
   @Autowired
   JWTProvider jwt;
+
+  @Autowired
+  UserService userService;
 
   // Login de usuário
   @PostMapping("/auth")
@@ -45,6 +54,42 @@ public class AuthUserController {
       response.addCookie(refreshTokenCookie);
 
       return ResponseEntity.ok().body(result);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+  }
+
+  // Recuperando login com firebase
+  @PostMapping("/auth/firebase")
+  public ResponseEntity<Object> firebaseLogin(@RequestBody Map<String, String> body) {
+    try {
+      String firebaseToken = body.get("firebaseToken");
+      if (firebaseToken == null || firebaseToken.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Firebase token is required.");
+      }
+
+      FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(firebaseToken);
+
+      String uid = decodedToken.getUid();
+      String email = decodedToken.getEmail();
+
+      // Buscar/Criar o usuário no banco de dados com esse uid e email que chamei aqui
+      UUID userId = userService.findByEmail(email);
+
+      if (userId == null) {
+        // Se o usuário não existir, chamar aqui o firebase para criar o usuário
+
+        // salvar também no banco de dados
+
+        // buscar ID no banco
+      }
+
+      String jwtToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofMinutes(60)));
+
+      Map<String, String> response = new HashMap<>();
+      response.put("token", jwtToken);
+      return ResponseEntity.ok().body(response);
+
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }

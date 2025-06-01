@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.espacoalcancar.espaco_alcancar_app_api.user.exceptions.UserAlreadyExistsException;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.ProfileType;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserDashboardResponse;
 import br.com.espacoalcancar.espaco_alcancar_app_api.user.models.dto.UserRequest;
@@ -81,11 +80,20 @@ public class UserService {
     return convertToUserDashboardResponse(response);
   }
 
+  // Procurar por um usuário a partir do e-mail
+  public UUID findByEmail(String email) throws UsernameNotFoundException {
+    return this.repository.findByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."))
+        .getId();
+  }
+
   // Criar novo usuário
   public UUID create(UserRequest request) {
     // Verificar se o usuário já existe
     if (repository.findByEmail(request.getEmail()).isPresent()) {
-      throw new UserAlreadyExistsException("E-mail já cadastrado: " + request.getEmail());
+      // busca o usuário pelo email e retorna i ID
+      UUID existingUserId = repository.findByEmail(request.getEmail()).get().getId();
+      return existingUserId;
     }
 
     UserEntity entity = new UserEntity();
