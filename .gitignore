@@ -6,6 +6,8 @@ target/
 
 # Spring Boot application properties
 src/main/resources/application.properties
+
+# Firebase
 src/main/resources/espaco-alcancar-fd4bf-firebase-adminsdk-fbsvc-15dbe26e3f.json
 
 ### STS ###
