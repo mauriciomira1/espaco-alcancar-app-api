@@ -12,12 +12,22 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import br.com.espacoalcancar.espaco_alcancar_app_api.professional.services.ProfessionalService;
+import br.com.espacoalcancar.espaco_alcancar_app_api.providers.JWTProvider;
+import br.com.espacoalcancar.espaco_alcancar_app_api.user.services.UserService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
   @Autowired
   private FirebaseTokenFilter firebaseTokenFilter;
+  @Autowired
+  private UserService userService;
+  @Autowired
+  private ProfessionalService professionalService;
+  @Autowired
+  private JWTProvider jwtProvider;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,7 +44,7 @@ public class SecurityConfig {
             .requestMatchers("/login/oauth2/code/**").permitAll()
 
             // Outros endpoints públicos:
-            .requestMatchers(HttpMethod.POST, "/user/new").permitAll()
+            .requestMatchers(HttpMethod.POST, "/user/new").authenticated()
             .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/professional/*new").permitAll()
 
@@ -67,7 +77,7 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/professional/me").authenticated()
 
             // Qualquer outra rota não listada acima deve exigir autenticação:
-            .anyRequest().authenticated())
+            .anyRequest().permitAll())
 
         // Configuração do OAuth2 Login
         .oauth2Login(oauth2 -> oauth2
@@ -75,7 +85,8 @@ public class SecurityConfig {
             .defaultSuccessUrl("http://localhost:3000/dashboard", true))
 
         // Filtro customizado do Firebase (antes do filtro de Username/Password)
-        .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
@@ -90,5 +101,10 @@ public class SecurityConfig {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
+  }
+
+  @Bean
+  public SecurityFilter securityFilter() {
+    return new SecurityFilter(jwtProvider, userService, professionalService);
   }
 }

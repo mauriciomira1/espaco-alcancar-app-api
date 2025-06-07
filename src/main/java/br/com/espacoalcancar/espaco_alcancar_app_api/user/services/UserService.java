@@ -131,15 +131,14 @@ public class UserService {
       throw new RuntimeException("User is not authenticated");
     }
 
-    UserDashboardResponse principal = (UserDashboardResponse) authentication.getPrincipal();
-    if (!(principal instanceof UserDashboardResponse)) {
-      throw new RuntimeException("User principal is not of expected type");
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof UserDashboardResponse userDashboard) {
+      UUID userId = userDashboard.getId();
+      return repository.findById(userId)
+          .orElseThrow(() -> new RuntimeException("User not found"));
+    } else {
+      throw new RuntimeException("User principal is not of expected type: " + principal.getClass().getName());
     }
-
-    // Buscar o UserEntity baseado no ID do principal
-    UUID userId = principal.getId();
-    return repository.findById(userId)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found."));
   }
 
   // Classe acessória para conversão de UserEntity para UserResponse

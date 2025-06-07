@@ -20,8 +20,8 @@ import java.util.List;
 public class FirebaseTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
@@ -32,6 +32,14 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
         }
 
         String token = header.substring(7);
+
+        // Só tenta validar como Firebase se o token for claramente do Firebase
+        // (exemplo: começa com 'eyJhbGciOiJSUzI1NiIsImtpZCI6')
+        // Caso contrário, apenas passa para o próximo filtro (JWT)
+        if (!token.startsWith("eyJhbGciOiJSUzI1NiIsImtpZCI6")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);

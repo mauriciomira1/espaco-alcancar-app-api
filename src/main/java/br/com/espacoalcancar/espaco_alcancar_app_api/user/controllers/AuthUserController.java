@@ -2,7 +2,9 @@ package br.com.espacoalcancar.espaco_alcancar_app_api.user.controllers;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -61,7 +63,7 @@ public class AuthUserController {
 
   // Recuperando login com firebase
   @PostMapping("/auth/firebase")
-  public ResponseEntity<Object> firebaseLogin(@RequestBody Map<String, String> body) {
+  public ResponseEntity<Object> firebaseLogin(@RequestBody Map<String, String> body, HttpServletResponse response) {
     try {
       String firebaseToken = body.get("firebaseToken");
       if (firebaseToken == null || firebaseToken.isEmpty()) {
@@ -70,25 +72,29 @@ public class AuthUserController {
 
       FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(firebaseToken);
 
-      String uid = decodedToken.getUid();
       String email = decodedToken.getEmail();
 
-      // Buscar/Criar o usuário no banco de dados com esse uid e email que chamei aqui
       UUID userId = userService.findByEmail(email);
 
-      if (userId == null) {
-        // Se o usuário não existir, chamar aqui o firebase para criar o usuário
-
-        // salvar também no banco de dados
-
-        // buscar ID no banco
-      }
+      // Adiciona a role ROLE_PATIENT
+      List<String> roles = new ArrayList<>();
+      roles.add("ROLE_PATIENT");
 
       String jwtToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofMinutes(60)));
+      String refreshToken = this.jwt.generateToken(userId, Instant.now().plus(Duration.ofDays(30)));
 
-      Map<String, String> response = new HashMap<>();
-      response.put("token", jwtToken);
-      return ResponseEntity.ok().body(response);
+      // Adiciona o refreshToken como cookie, igual ao /auth
+      Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+      refreshTokenCookie.setHttpOnly(true);
+      refreshTokenCookie.setSecure(true);
+      refreshTokenCookie.setPath("/");
+      refreshTokenCookie.setMaxAge((int) Duration.ofDays(30).getSeconds());
+      response.addCookie(refreshTokenCookie);
+
+      Map<String, String> resp = new HashMap<>();
+      resp.put("token", jwtToken);
+      resp.put("refreshToken", refreshToken);
+      return ResponseEntity.ok().body(resp);
 
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
